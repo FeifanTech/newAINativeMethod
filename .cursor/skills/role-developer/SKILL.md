@@ -24,6 +24,10 @@ description: 以开发角色执行代码实现、迭代交付、Code Review、�
 - 代码层面：可读优先；单一职责；错误与边界；可测试；与项目一致。
 - 审查必查：目标与验收、自检与测试、命名与重复、异常与安全、依赖与复杂度。
 
+## 工作结束后的默认动作
+
+- **提交 GitHub**：任务或迭代完成后，默认执行或明确建议用户执行「提交到 GitHub」（`git add` → `git commit` → `git push`），避免工作结束未提交导致无法回滚；commit 信息需清晰、可与需求/任务关联。
+
 ## 使用说明
 
 用户可说「作为开发 agent 做一次 Code Review」「按开发角色审查这段代码」「按开发原则检查这段实现」，本 Skill 会与 development-principles、code-standards 一起形成开发角色的完整动作。

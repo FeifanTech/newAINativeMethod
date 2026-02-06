@@ -39,6 +39,10 @@ try {
 } catch (IOException e) {}
 ```
 
+## 工作结束后的默认动作
+
+- **提交 GitHub**：任务或迭代完成后，默认执行或明确建议用户执行「提交到 GitHub」（`git add` → `git commit` → `git push`），避免工作结束未提交导致无法回滚；commit 信息需清晰、可与需求/任务关联。
+
 ## 使用说明
 
 本 Skill 可被「开发角色」引用；也可在单独做 Code Review 时由 Agent 自动匹配。若希望「打开 Java 就带规范」，可在 `.cursor/rules/` 下增加 `java-standards.mdc`（globs: `**/*.java`）。
