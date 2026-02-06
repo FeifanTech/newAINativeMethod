@@ -22,6 +22,70 @@
     return div.innerHTML;
   }
 
+  /** 地图选点：当前要回填的水域下拉框、Leaflet 实例、选点坐标 */
+  let mapPickerSelect = null;
+  let mapPickerMap = null;
+  let mapPickerMarker = null;
+  let mapPickerLatLng = null;
+
+  function openMapPicker(waterAreaSelect) {
+    if (!waterAreaSelect) return;
+    mapPickerSelect = waterAreaSelect;
+    mapPickerLatLng = null;
+    if (mapPickerMarker && mapPickerMap) {
+      mapPickerMap.removeLayer(mapPickerMarker);
+      mapPickerMarker = null;
+    }
+    const modal = document.getElementById('map-picker-modal');
+    const hint = document.getElementById('map-picker-hint');
+    if (modal) modal.style.display = 'flex';
+    if (hint) hint.textContent = '点击地图标记养殖/捕捞水域位置';
+    if (typeof L !== 'undefined') {
+      if (!mapPickerMap) {
+        const center = typeof QIANDAO_LAKE_CENTER !== 'undefined' ? QIANDAO_LAKE_CENTER : { lat: 29.605, lng: 119.028 };
+        mapPickerMap = L.map('map-picker-container').setView([center.lat, center.lng], 11);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapPickerMap);
+        mapPickerMap.on('click', function (e) {
+          mapPickerLatLng = e.latlng;
+          if (mapPickerMarker && mapPickerMap) mapPickerMap.removeLayer(mapPickerMarker);
+          mapPickerMarker = L.marker(e.latlng).addTo(mapPickerMap);
+          if (hint) hint.textContent = '已选点：' + e.latlng.lng.toFixed(4) + ', ' + e.latlng.lat.toFixed(4) + '（点击确认选点）';
+        });
+      } else {
+        mapPickerMap.invalidateSize();
+      }
+    }
+  }
+
+  function closeMapPicker() {
+    const modal = document.getElementById('map-picker-modal');
+    if (modal) modal.style.display = 'none';
+    mapPickerSelect = null;
+  }
+
+  function confirmMapPicker() {
+    if (mapPickerSelect && mapPickerLatLng) {
+      const label = '千岛湖选点(' + mapPickerLatLng.lng.toFixed(4) + ',' + mapPickerLatLng.lat.toFixed(4) + ')';
+      const opt = document.createElement('option');
+      opt.value = label;
+      opt.textContent = label;
+      mapPickerSelect.appendChild(opt);
+      mapPickerSelect.value = label;
+    }
+    closeMapPicker();
+  }
+
+  (function bindMapPickerGlobal() {
+    const modal = document.getElementById('map-picker-modal');
+    if (!modal) return;
+    const backdrop = modal.querySelector('.map-picker-backdrop');
+    const cancelBtn = document.getElementById('map-picker-cancel');
+    const confirmBtn = document.getElementById('map-picker-confirm');
+    if (backdrop) backdrop.addEventListener('click', closeMapPicker);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeMapPicker);
+    if (confirmBtn) confirmBtn.addEventListener('click', confirmMapPicker);
+  })();
+
   const STEPS = [
     { path: 'subjects', title: '主体登记', pathName: 'subjects' },
     { path: 'farming', title: '养殖/捕捞', pathName: 'farming' },
@@ -137,7 +201,16 @@
           <form id="form-subject-f" class="form-grid">
             <div class="form-item"><label>名称</label><input type="text" name="name" required /></div>
             <div class="form-item"><label>类型</label><select name="type"><option value="养殖/捕捞企业">养殖/捕捞企业</option><option value="加工企业">加工企业</option><option value="检测机构">检测机构</option><option value="政府监管">政府监管</option></select></div>
-            <div class="form-item"><label>区域</label><input type="text" name="region" placeholder="如淳安县/千岛湖" /></div>
+            <div class="form-item form-item-region">
+              <label>区域</label>
+              <select name="region" id="subject-region-select">
+                ${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.regions : ['淳安县', '千岛湖镇', '其他']).map(r => `<option value="${r === '其他' ? '_other' : r}">${r}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-item form-item-region-other" id="subject-region-other-wrap" style="display:none;">
+              <label>其他区域</label>
+              <input type="text" name="regionOther" placeholder="请输入区域名称" />
+            </div>
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">保存</button>
               <button type="button" class="btn btn-default" data-action="cancel-subject">取消</button>
@@ -293,16 +366,28 @@
 
     if (subPath === 'subjects') {
       const form = container.querySelector('#form-subject-f');
-      if (form) form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const list = store.getSubjects();
-        list.push({ id: nextId('subject'), name: fd.get('name'), type: fd.get('type'), region: fd.get('region') || '', status: '已通过' });
-        store.setSubjects(list);
-        if (formPanel) formPanel.style.display = 'none';
-        form.reset();
-        refresh();
-      });
+      if (form) {
+        const regionSelect = form.querySelector('select[name="region"]');
+        const regionOtherWrap = form.querySelector('input[name="regionOther"]')?.closest('.form-item');
+        if (regionSelect && regionOtherWrap) {
+          regionSelect.addEventListener('change', () => {
+            regionOtherWrap.style.display = regionSelect.value === '_other' ? 'block' : 'none';
+          });
+        }
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const fd = new FormData(form);
+          const regionVal = fd.get('region');
+          const region = regionVal === '_other' ? (fd.get('regionOther') || '').trim() : (regionVal || '');
+          const list = store.getSubjects();
+          list.push({ id: nextId('subject'), name: fd.get('name'), type: fd.get('type'), region: region, status: '已通过' });
+          store.setSubjects(list);
+          if (formPanel) formPanel.style.display = 'none';
+          form.reset();
+          if (regionOtherWrap) regionOtherWrap.style.display = 'none';
+          refresh();
+        });
+      }
     }
 
     if (subPath === 'farming') {
@@ -312,22 +397,34 @@
           <div class="form-item"><label>主体</label><select name="subjectId" required>${farmSubjects.length ? farmSubjects.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('') : '<option value="">请先添加养殖主体</option>'}</select></div>
           <div class="form-item"><label>模式</label><select name="mode"><option value="保水渔业">保水渔业</option><option value="RAS工厂化">RAS工厂化</option></select></div>
           <div class="form-item"><label>品种</label><input type="text" name="variety" placeholder="如鲢鱼、鳙鱼" required /></div>
-          <div class="form-item"><label>数量</label><input type="text" name="quantity" placeholder="如 100 尾" required /></div>
+          <div class="form-item form-item-inline"><label>数量</label><div class="input-with-unit"><input type="number" name="quantityNum" min="1" step="1" placeholder="数量" required /><select name="quantityUnit">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.quantityUnits : ['尾', '箱', '公斤', '吨']).map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
           <div class="form-item"><label>日期</label><input type="date" name="date" required /></div>
-          <div class="form-item"><label>水域</label><input type="text" name="waterArea" placeholder="如千岛湖XX区域" /></div>
+          <div class="form-item"><label>水域</label><div class="input-with-picker"><select name="waterArea">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.waterAreas : ['千岛湖中心水域', '千岛湖东南水域', '其他']).map(a => `<option value="${a === '其他' ? '_other' : a}">${a}</option>`).join('')}</select><button type="button" class="btn btn-default btn-map-pick" data-action="open-map-picker" title="地图选点">地图选点</button></div><input type="text" name="waterAreaOther" class="water-area-other" placeholder="其他水域（手动输入）" style="display:none;margin-top:6px;" /></div>
           <div class="form-actions"><button type="submit" class="btn btn-primary">保存</button><button type="button" class="btn btn-default" data-action="cancel-farming">取消</button></div>
         `;
         form.querySelector('[data-action="cancel-farming"]')?.addEventListener('click', () => { if (formPanel) formPanel.style.display = 'none'; });
+        const waterAreaSelect = form.querySelector('select[name="waterArea"]');
+        const waterAreaOther = form.querySelector('input[name="waterAreaOther"]');
+        if (waterAreaSelect && waterAreaOther) {
+          waterAreaSelect.addEventListener('change', () => {
+            waterAreaOther.style.display = waterAreaSelect.value === '_other' ? 'block' : 'none';
+          });
+        }
+        form.querySelector('[data-action="open-map-picker"]')?.addEventListener('click', () => openMapPicker(waterAreaSelect));
         form.addEventListener('submit', (e) => {
           e.preventDefault();
           const fd = new FormData(form);
           const list = store.getBatchesFarming();
           const sub = subjects.find(s => s.id === fd.get('subjectId'));
           const batchNo = nextBatchNo(sub ? sub.name.slice(0, 2) : 'QDL');
-          list.push({ id: nextId('farm'), subjectId: fd.get('subjectId'), batchNo, mode: fd.get('mode'), variety: fd.get('variety'), quantity: fd.get('quantity'), date: fd.get('date'), waterArea: fd.get('waterArea') || '' });
+          const waterVal = fd.get('waterArea');
+          const waterArea = waterVal === '_other' ? (fd.get('waterAreaOther') || '').trim() : (waterVal || '');
+          const quantity = (fd.get('quantityNum') || '') + ' ' + (fd.get('quantityUnit') || '尾');
+          list.push({ id: nextId('farm'), subjectId: fd.get('subjectId'), batchNo, mode: fd.get('mode'), variety: fd.get('variety'), quantity: quantity.trim(), date: fd.get('date'), waterArea });
           store.setBatchesFarming(list);
           if (formPanel) formPanel.style.display = 'none';
           form.reset();
+          if (waterAreaOther) waterAreaOther.style.display = 'none';
           refresh();
         });
       }
@@ -342,7 +439,7 @@
           <div class="form-item"><label>路径</label><select name="pathType"><option value="传统路径">传统路径</option><option value="现代路径">现代路径</option></select></div>
           <div class="form-item"><label>加工类型</label><input type="text" name="processType" placeholder="如分割、冷冻" /></div>
           <div class="form-item"><label>加工日期</label><input type="date" name="date" required /></div>
-          <div class="form-item"><label>产出量</label><input type="text" name="outputQty" placeholder="如 50 箱" required /></div>
+          <div class="form-item form-item-inline"><label>产出量</label><div class="input-with-unit"><input type="number" name="outputQtyNum" min="1" step="1" placeholder="数量" required /><select name="outputQtyUnit">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.outputUnits : ['箱', '公斤', '吨']).map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
           <div class="form-actions"><button type="submit" class="btn btn-primary">保存</button><button type="button" class="btn btn-default" data-action="cancel-processing">取消</button></div>
         `;
         form.querySelector('[data-action="cancel-processing"]')?.addEventListener('click', () => { if (formPanel) formPanel.style.display = 'none'; });
@@ -351,7 +448,8 @@
           const fd = new FormData(form);
           const upstream = farming.find(b => b.id === fd.get('upstreamBatchId'));
           const list = store.getBatchesProcessing();
-          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: nextBatchNo('JG'), upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: fd.get('outputQty') });
+          const outputQty = (fd.get('outputQtyNum') || '') + ' ' + (fd.get('outputQtyUnit') || '箱');
+          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: nextBatchNo('JG'), upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: outputQty.trim() });
           store.setBatchesProcessing(list);
           if (formPanel) formPanel.style.display = 'none';
           refresh();
@@ -468,7 +566,8 @@
               <form id="form-subject-f" class="form-grid">
                 <div class="form-item"><label>名称</label><input type="text" name="name" required /></div>
                 <div class="form-item"><label>类型</label><select name="type"><option value="养殖/捕捞企业">养殖/捕捞企业</option><option value="加工企业">加工企业</option><option value="检测机构">检测机构</option></select></div>
-                <div class="form-item"><label>区域</label><input type="text" name="region" placeholder="如淳安县/千岛湖" /></div>
+                <div class="form-item form-item-region"><label>区域</label><select name="region" id="subject-region-select-ent">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.regions : ['淳安县', '千岛湖镇', '其他']).map(r => `<option value="${r === '其他' ? '_other' : r}">${r}</option>`).join('')}</select></div>
+                <div class="form-item form-item-region-other" id="subject-region-other-wrap-ent" style="display:none;"><label>其他区域</label><input type="text" name="regionOther" placeholder="请输入区域名称" /></div>
                 <div class="form-actions"><button type="submit" class="btn btn-primary">保存</button><button type="button" class="btn btn-default" data-action="cancel-subject">取消</button></div>
               </form>
             </div>
@@ -497,9 +596,9 @@
                 <div class="form-item"><label>主体</label><select name="subjectId" required>${farmSubs.length ? farmSubs.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('') : '<option value="">请先在步骤一添加养殖主体</option>'}</select></div>
                 <div class="form-item"><label>模式</label><select name="mode"><option value="保水渔业">保水渔业</option><option value="RAS工厂化">RAS工厂化</option></select></div>
                 <div class="form-item"><label>品种</label><input type="text" name="variety" placeholder="如鲢鱼、鳙鱼" required /></div>
-                <div class="form-item"><label>数量</label><input type="text" name="quantity" placeholder="如 100 尾" required /></div>
+                <div class="form-item form-item-inline"><label>数量</label><div class="input-with-unit"><input type="number" name="quantityNum" min="1" step="1" placeholder="数量" required /><select name="quantityUnit">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.quantityUnits : ['尾', '箱', '公斤', '吨']).map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
                 <div class="form-item"><label>日期</label><input type="date" name="date" required /></div>
-                <div class="form-item"><label>水域</label><input type="text" name="waterArea" placeholder="如千岛湖XX区域" /></div>
+                <div class="form-item"><label>水域</label><div class="input-with-picker"><select name="waterArea">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.waterAreas : ['千岛湖中心水域', '千岛湖东南水域', '其他']).map(a => `<option value="${a === '其他' ? '_other' : a}">${a}</option>`).join('')}</select><button type="button" class="btn btn-default btn-map-pick" data-action="open-map-picker" title="地图选点">地图选点</button></div><input type="text" name="waterAreaOther" class="water-area-other" placeholder="其他水域（手动输入）" style="display:none;margin-top:6px;" /></div>
                 <div class="form-actions"><button type="submit" class="btn btn-primary">保存</button><button type="button" class="btn btn-default" data-action="cancel-farming">取消</button></div>
               </form>
             </div>
@@ -531,7 +630,7 @@
                 <div class="form-item"><label>路径</label><select name="pathType"><option value="传统路径">传统路径</option><option value="现代路径">现代路径</option></select></div>
                 <div class="form-item"><label>加工类型</label><input type="text" name="processType" placeholder="如分割、冷冻" /></div>
                 <div class="form-item"><label>加工日期</label><input type="date" name="date" required /></div>
-                <div class="form-item"><label>产出量</label><input type="text" name="outputQty" placeholder="如 50 箱" required /></div>
+                <div class="form-item form-item-inline"><label>产出量</label><div class="input-with-unit"><input type="number" name="outputQtyNum" min="1" step="1" placeholder="数量" required /><select name="outputQtyUnit">${(typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.outputUnits : ['箱', '公斤', '吨']).map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
                 <div class="form-actions"><button type="submit" class="btn btn-primary">保存</button><button type="button" class="btn btn-default" data-action="cancel-processing">取消</button></div>
               </form>
             </div>
