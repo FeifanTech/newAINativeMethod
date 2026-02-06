@@ -1,6 +1,6 @@
 # 千岛湖全鱼品溯源平台 · Demo（第一版）
 
-高保真前端 Demo，依据 [PRD](../../docs/QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md) 与 [技术方案](../../docs/QIANDAO_LAKE_TRACEABILITY_TECH_SOLUTION.md) v0.3。**纯前端、无后端**，数据临时存于浏览器 **localStorage**。
+高保真前端 Demo，依据 [PRD](../../docs/QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md) 与 [技术方案](../../docs/QIANDAO_LAKE_TRACEABILITY_TECH_SOLUTION.md) **v0.4**。**纯前端、无后端**，数据临时存于浏览器 **localStorage**。
 
 ## 运行方式
 
@@ -35,6 +35,7 @@ python3 -m http.server 8080
 - **区域**（主体管理）：内置下拉（淳安县、千岛湖镇、文昌镇等），可选「其他」后手动输入。
 - **水域**（养殖/捕捞）：内置下拉（千岛湖中心/东南/西北等水域）+ **地图选点**（Leaflet 地图点击选点，确认后回填「千岛湖选点(经度,纬度)」）；可选「其他」后手动输入。
 - **数量 / 产出量**：数字输入 + 单位下拉（尾、箱、公斤、吨等），避免单位写错。
+- **上下游数量约束（PRD v0.4）**：养殖批次登记数量为「可用总量」；政府/企业端养殖批次列表展示「已关联下游累计消耗」「剩余可用数量」；加工批次可填「本批消耗上游数量/单位」（可选），提交时若超过上游剩余可用数量则**预警**（Demo 仍允许保存，正式环境可配置为阻断）。
 
 ## 数据存储（localStorage）
 
@@ -58,4 +59,4 @@ python3 -m http.server 8080
 ## 依据
 
 - 开发原则：小步交付、可追溯、协作一致（见 [development-principles](../../.cursor/skills/development-principles/SKILL.md)）。
-- 产品与架构：PRD v0.3、技术方案 v0.3。
+- 产品与架构：PRD v0.4、技术方案 v0.4（含上下游数量约束与校验）。

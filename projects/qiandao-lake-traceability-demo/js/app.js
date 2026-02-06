@@ -223,16 +223,20 @@
 
   function farmingContent() {
     const list = store.getBatchesFarming();
+    const processingList = store.getBatchesProcessing();
     return `
       <div class="page-block">
         <h1 class="page-title">养殖/捕捞批次</h1>
-        <p class="page-desc">保水渔业与 RAS 工厂化双模式登记</p>
+        <p class="page-desc">保水渔业与 RAS 工厂化双模式登记；登记数量为可用总量，下表展示已关联下游累计消耗与剩余可用数量（PRD v0.4）</p>
         <div class="toolbar"><button type="button" class="btn btn-primary" data-action="add-farming">新增批次</button></div>
         <div class="card-block">
           <table class="table table-zebra">
-            <thead><tr><th>批次号</th><th>模式</th><th>品种</th><th>数量</th><th>日期</th><th>水域</th></tr></thead>
+            <thead><tr><th>批次号</th><th>模式</th><th>品种</th><th>数量（可用总量）</th><th>已关联下游累计消耗</th><th>剩余可用数量</th><th>日期</th><th>水域</th></tr></thead>
             <tbody>
-              ${list.length ? list.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.mode)}</td><td>${escapeHtml(b.variety)}</td><td>${escapeHtml(b.quantity)}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.waterArea || '-')}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">暂无数据</td></tr>'}
+              ${list.length ? list.map(b => {
+                const cons = store.getUpstreamConsumption(b.id, list, processingList);
+                return `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.mode)}</td><td>${escapeHtml(b.variety)}</td><td>${escapeHtml(b.quantity)}</td><td>${escapeHtml(cons.consumedStr)}</td><td>${escapeHtml(cons.remainingStr)}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.waterArea || '-')}</td></tr>`;
+              }).join('') : '<tr><td colspan="8" class="empty">暂无数据</td></tr>'}
             </tbody>
           </table>
         </div>
@@ -249,13 +253,13 @@
     return `
       <div class="page-block">
         <h1 class="page-title">加工批次</h1>
-        <p class="page-desc">传统路径与现代路径登记，关联上游养殖批次</p>
+        <p class="page-desc">传统路径与现代路径登记，关联上游养殖批次；本批消耗上游数量用于上下游数量校验（PRD v0.4）</p>
         <div class="toolbar"><button type="button" class="btn btn-primary" data-action="add-processing">新增加工批次</button></div>
         <div class="card-block">
           <table class="table table-zebra">
-            <thead><tr><th>加工批次号</th><th>路径</th><th>关联上游</th><th>日期</th><th>产出量</th></tr></thead>
+            <thead><tr><th>加工批次号</th><th>路径</th><th>关联上游</th><th>本批消耗上游数量</th><th>日期</th><th>产出量</th></tr></thead>
             <tbody>
-              ${list.length ? list.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.pathType)}</td><td>${escapeHtml(b.upstreamBatchNo || '-')}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.outputQty)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">暂无数据</td></tr>'}
+              ${list.length ? list.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.pathType)}</td><td>${escapeHtml(b.upstreamBatchNo || '-')}</td><td>${escapeHtml(b.consumedUpstreamQty || '-')}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.outputQty)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">暂无数据</td></tr>'}
             </tbody>
           </table>
         </div>
@@ -433,9 +437,11 @@
     if (subPath === 'processing') {
       const form = container.querySelector('#form-processing-f');
       if (form) {
+        const quantityUnits = typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.quantityUnits : ['尾', '箱', '公斤', '吨', '斤'];
         if (!refreshCallback) form.innerHTML = `
           <div class="form-item"><label>主体</label><select name="subjectId" required>${procSubjects.length ? procSubjects.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('') : '<option value="">请先添加加工企业</option>'}</select></div>
-          <div class="form-item"><label>上游批次（养殖）</label><select name="upstreamBatchId">${farming.length ? farming.map(b => `<option value="${b.id}">${escapeHtml(b.batchNo)} ${b.variety}</option>`).join('') : '<option value="">无养殖批次</option>'}</select></div>
+          <div class="form-item"><label>上游批次（养殖）</label><select name="upstreamBatchId">${farming.length ? farming.map(b => `<option value="${b.id}">${escapeHtml(b.batchNo)} ${b.variety}（${escapeHtml(b.quantity)}）</option>`).join('') : '<option value="">无养殖批次</option>'}</select></div>
+          <div class="form-item form-item-inline"><label>本批消耗上游数量/单位（可选，用于校验）</label><div class="input-with-unit"><input type="number" name="consumedUpstreamNum" min="0" step="1" placeholder="数量" /><select name="consumedUpstreamUnit">${quantityUnits.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
           <div class="form-item"><label>路径</label><select name="pathType"><option value="传统路径">传统路径</option><option value="现代路径">现代路径</option></select></div>
           <div class="form-item"><label>加工类型</label><input type="text" name="processType" placeholder="如分割、冷冻" /></div>
           <div class="form-item"><label>加工日期</label><input type="date" name="date" required /></div>
@@ -449,7 +455,17 @@
           const upstream = farming.find(b => b.id === fd.get('upstreamBatchId'));
           const list = store.getBatchesProcessing();
           const outputQty = (fd.get('outputQtyNum') || '') + ' ' + (fd.get('outputQtyUnit') || '箱');
-          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: nextBatchNo('JG'), upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: outputQty.trim() });
+          const consumedNum = fd.get('consumedUpstreamNum');
+          const consumedUnit = fd.get('consumedUpstreamUnit') || '尾';
+          const consumedUpstreamQty = (consumedNum !== '' && consumedNum != null) ? (consumedNum + ' ' + consumedUnit).trim() : '';
+          if (upstream && consumedUpstreamQty && store.parseQuantityStr(consumedUpstreamQty)) {
+            const cons = store.getUpstreamConsumption(upstream.id, farming, list);
+            const thisConsumed = store.parseQuantityStr(consumedUpstreamQty);
+            if (thisConsumed && thisConsumed.unit === cons.unit && thisConsumed.num > cons.remainingNum) {
+              alert('预警：本批消耗（' + consumedUpstreamQty + '）超过该上游批次剩余可用数量（' + cons.remainingStr + '）。Demo 仍允许保存，正式环境可配置为阻断提交。');
+            }
+          }
+          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: nextBatchNo('JG'), upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', consumedUpstreamQty: consumedUpstreamQty || undefined, pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: outputQty.trim() });
           store.setBatchesProcessing(list);
           if (formPanel) formPanel.style.display = 'none';
           refresh();
@@ -576,17 +592,19 @@
             </div>
           </div>
         `;
-      case 'farming':
+      case 'farming': {
+        const consMap = {};
+        listFarm.forEach(b => { const c = store.getUpstreamConsumption(b.id, listFarm, listProc); consMap[b.id] = c; });
         return `
           <div class="page-block">
             <h2 class="step-heading">第二步：养殖/捕捞登记</h2>
-            <p class="page-desc">登记养殖或捕捞批次，选择保水渔业或 RAS 工厂化模式</p>
+            <p class="page-desc">登记养殖或捕捞批次，数量为可用总量；下表展示剩余可用数量（PRD v0.4）</p>
             <div class="toolbar"><button type="button" class="btn btn-primary" data-action="add-farming">新增批次</button></div>
             <div class="card-block">
               <table class="table table-zebra">
-                <thead><tr><th>批次号</th><th>模式</th><th>品种</th><th>数量</th><th>日期</th></tr></thead>
+                <thead><tr><th>批次号</th><th>模式</th><th>品种</th><th>数量（可用总量）</th><th>剩余可用数量</th><th>日期</th></tr></thead>
                 <tbody>
-                  ${listFarm.length ? listFarm.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.mode)}</td><td>${escapeHtml(b.variety)}</td><td>${escapeHtml(b.quantity)}</td><td>${escapeHtml(b.date)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">暂无数据</td></tr>'}
+                  ${listFarm.length ? listFarm.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.mode)}</td><td>${escapeHtml(b.variety)}</td><td>${escapeHtml(b.quantity)}</td><td>${escapeHtml((consMap[b.id] || {}).remainingStr || '—')}</td><td>${escapeHtml(b.date)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">暂无数据</td></tr>'}
                 </tbody>
               </table>
             </div>
@@ -608,17 +626,19 @@
             </div>
           </div>
         `;
-      case 'processing':
+      }
+      case 'processing': {
+        const quantityUnitsEnt = typeof TRACE_OPTIONS !== 'undefined' ? TRACE_OPTIONS.quantityUnits : ['尾', '箱', '公斤', '吨', '斤'];
         return `
           <div class="page-block">
             <h2 class="step-heading">第三步：加工批次登记</h2>
-            <p class="page-desc">新增加工批次并关联上游养殖批次</p>
+            <p class="page-desc">新增加工批次并关联上游养殖批次；填写本批消耗上游数量用于数量校验（PRD v0.4）</p>
             <div class="toolbar"><button type="button" class="btn btn-primary" data-action="add-processing">新增加工批次</button></div>
             <div class="card-block">
               <table class="table table-zebra">
-                <thead><tr><th>加工批次号</th><th>路径</th><th>关联上游</th><th>日期</th><th>产出量</th></tr></thead>
+                <thead><tr><th>加工批次号</th><th>路径</th><th>关联上游</th><th>本批消耗上游数量</th><th>日期</th><th>产出量</th></tr></thead>
                 <tbody>
-                  ${listProc.length ? listProc.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.pathType)}</td><td>${escapeHtml(b.upstreamBatchNo || '-')}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.outputQty)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">暂无数据</td></tr>'}
+                  ${listProc.length ? listProc.map(b => `<tr><td>${escapeHtml(b.batchNo)}</td><td>${escapeHtml(b.pathType)}</td><td>${escapeHtml(b.upstreamBatchNo || '-')}</td><td>${escapeHtml(b.consumedUpstreamQty || '-')}</td><td>${escapeHtml(b.date)}</td><td>${escapeHtml(b.outputQty)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">暂无数据</td></tr>'}
                 </tbody>
               </table>
             </div>
@@ -626,7 +646,8 @@
               <h3 class="form-drawer-title">新增加工批次</h3>
               <form id="form-processing-f" class="form-grid">
                 <div class="form-item"><label>主体</label><select name="subjectId" required>${procSubs.length ? procSubs.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('') : '<option value="">请先添加加工企业</option>'}</select></div>
-                <div class="form-item"><label>上游批次（养殖）</label><select name="upstreamBatchId">${farming.length ? farming.map(b => `<option value="${b.id}">${escapeHtml(b.batchNo)} ${b.variety}</option>`).join('') : '<option value="">无养殖批次</option>'}</select></div>
+                <div class="form-item"><label>上游批次（养殖）</label><select name="upstreamBatchId">${farming.length ? farming.map(b => `<option value="${b.id}">${escapeHtml(b.batchNo)} ${b.variety}（${escapeHtml(b.quantity)}）</option>`).join('') : '<option value="">无养殖批次</option>'}</select></div>
+                <div class="form-item form-item-inline"><label>本批消耗上游数量/单位（可选，用于校验）</label><div class="input-with-unit"><input type="number" name="consumedUpstreamNum" min="0" step="1" placeholder="数量" /><select name="consumedUpstreamUnit">${quantityUnitsEnt.map(u => `<option value="${u}">${u}</option>`).join('')}</select></div></div>
                 <div class="form-item"><label>路径</label><select name="pathType"><option value="传统路径">传统路径</option><option value="现代路径">现代路径</option></select></div>
                 <div class="form-item"><label>加工类型</label><input type="text" name="processType" placeholder="如分割、冷冻" /></div>
                 <div class="form-item"><label>加工日期</label><input type="date" name="date" required /></div>
@@ -640,6 +661,7 @@
             </div>
           </div>
         `;
+      }
       case 'inspection':
         return `
           <div class="page-block">
