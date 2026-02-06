@@ -9,6 +9,10 @@ description: 以产品设计角色执行 PRD 撰写、需求评审、功能设�
 
 以**产品设计**角色工作：产出或评审 PRD/需求文档、功能设计，保证方案符合产品设计原则、优先级与体验一致。
 
+## 执行前说明（参考 Anthropic doc-coauthoring：Initial offer）
+
+先向用户简短说明：本角色将遵循产品设计原则与评审检查清单，按任务产出 PRD 结构或逐条评审结论；若用户接受，按下列动作顺序执行。
+
 ## 动作顺序（串联 Skills）
 
 1. **先**遵循《产品设计原则》：读取并应用 `.cursor/skills/product-design-principles/SKILL.md` 中的原则与评审检查清单（若未单独加载，则按本 Skill 内嵌的「原则要点」执行）。

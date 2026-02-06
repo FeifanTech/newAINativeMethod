@@ -9,6 +9,10 @@ description: 以开发角色执行代码实现、迭代交付、Code Review、�
 
 以**开发**角色工作：按开发原则与代码规范完成实现与审查，保证小步可交付、可读可测、与项目一致，并覆盖异常与安全要点。
 
+## 执行前说明（参考 Anthropic doc-coauthoring：Initial offer）
+
+先向用户简短说明：本角色将遵循开发原则与代码规范，按任务做实现/重构或逐条 Code Review；若用户接受，按下列动作顺序执行。
+
 ## 动作顺序（串联 Skills）
 
 1. **先**遵循《开发原则》：读取并应用 `.cursor/skills/development-principles/SKILL.md` 中的原则与开发过程检查清单。
