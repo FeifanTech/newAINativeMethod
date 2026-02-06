@@ -1,0 +1,800 @@
+/**
+ * 千岛湖全鱼品溯源平台 Demo - 政府 UI 标准样式
+ * 政务蓝主色、规整层级、步骤条、表格与卡片规范
+ */
+:root {
+  /* 政务蓝主色 */
+  --gov-primary: #0066b3;
+  --gov-primary-hover: #005a9e;
+  --gov-primary-light: #e6f2fa;
+  --gov-primary-dark: #004c8c;
+  /* 辅助色 */
+  --gov-success: #2e7d32;
+  --gov-success-bg: #e8f5e9;
+  --gov-danger: #c62828;
+  --gov-danger-bg: #ffebee;
+  --gov-warning: #ed6c02;
+  --gov-warning-bg: #fff3e0;
+  /* 中性色 */
+  --gov-bg: #f0f4f8;
+  --gov-surface: #ffffff;
+  --gov-border: #d4dce4;
+  --gov-text: #1a2332;
+  --gov-text-secondary: #4a5568;
+  --gov-text-muted: #718096;
+  /* 布局 */
+  --gov-radius: 4px;
+  --gov-radius-lg: 8px;
+  --gov-shadow: 0 1px 3px rgba(0, 102, 179, 0.08);
+  --gov-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--gov-text);
+  background: var(--gov-bg);
+  line-height: 1.6;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Header 政务风格 ========== */
+.header {
+  background: linear-gradient(135deg, var(--gov-primary) 0%, var(--gov-primary-dark) 100%);
+  box-shadow: 0 2px 8px rgba(0, 102, 179, 0.2);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+}
+
+.brand-text {
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  border-radius: var(--gov-radius);
+  font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ========== Main 内容区 ========== */
+.main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ========== 首页 · 角色入口 ========== */
+.page-home {
+  padding: 32px 0 48px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--gov-text);
+  margin: 0 0 12px;
+  letter-spacing: 0.5px;
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--gov-text-secondary);
+  margin: 0;
+}
+
+.role-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 768px) {
+  .role-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.role-card {
+  display: block;
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  padding: 28px 24px;
+  text-decoration: none;
+  color: var(--gov-text);
+  box-shadow: var(--gov-shadow-card);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.role-card:hover {
+  border-color: var(--gov-primary);
+  box-shadow: 0 4px 16px rgba(0, 102, 179, 0.12);
+  transform: translateY(-2px);
+}
+
+.role-card .role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--gov-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.role-card.gov .role-icon {
+  background: linear-gradient(135deg, var(--gov-primary), var(--gov-primary-dark));
+}
+
+.role-card.enterprise .role-icon {
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.role-card.consumer .role-icon {
+  background: linear-gradient(135deg, #0288d1, #01579b);
+}
+
+.role-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--gov-text);
+}
+
+.role-card p {
+  font-size: 13px;
+  color: var(--gov-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.page-footer-hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--gov-text-muted);
+  margin: 0;
+}
+
+/* ========== 政府 / 企业 通用区块 ========== */
+.gov-theme .page-block,
+.page-enterprise .page-block {
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  padding: 24px;
+  box-shadow: var(--gov-shadow-card);
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gov-text);
+  margin: 0 0 8px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gov-primary);
+}
+
+.page-desc {
+  font-size: 14px;
+  color: var(--gov-text-secondary);
+  margin: 0 0 20px;
+}
+
+.step-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gov-text);
+  margin: 0 0 8px;
+}
+
+.block-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--gov-text);
+}
+
+.toolbar {
+  margin-bottom: 16px;
+}
+
+.card-block {
+  margin-top: 16px;
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius);
+  overflow: hidden;
+}
+
+/* ========== 步骤条 Stepper ========== */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 20px 0 24px;
+  margin-bottom: 24px;
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  box-shadow: var(--gov-shadow-card);
+}
+
+.stepper-item {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--gov-text-muted);
+  font-size: 14px;
+}
+
+.stepper-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gov-border);
+  color: var(--gov-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-right: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.stepper-item.current .stepper-num {
+  background: var(--gov-primary);
+  color: #fff;
+}
+
+.stepper-item.done .stepper-num {
+  background: var(--gov-success);
+  color: #fff;
+}
+
+.stepper-item.current {
+  color: var(--gov-primary);
+  font-weight: 500;
+}
+
+.stepper-item.done {
+  color: var(--gov-text-secondary);
+}
+
+.stepper-item:hover {
+  color: var(--gov-primary);
+}
+
+.stepper-item:hover .stepper-num {
+  background: var(--gov-primary-light);
+  color: var(--gov-primary);
+}
+
+.stepper-item.done:hover .stepper-num {
+  background: var(--gov-success);
+  color: #fff;
+}
+
+.stepper-line {
+  width: 40px;
+  height: 2px;
+  background: var(--gov-border);
+  margin: 0 8px;
+}
+
+.wizard-header {
+  margin-bottom: 0;
+}
+
+.wizard-body {
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 24px;
+  box-shadow: var(--gov-shadow-card);
+}
+
+.wizard-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gov-border);
+  display: flex;
+  gap: 12px;
+}
+
+/* ========== 按钮 ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: var(--gov-radius);
+  border: 1px solid var(--gov-border);
+  background: var(--gov-surface);
+  color: var(--gov-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  border-color: var(--gov-primary);
+  color: var(--gov-primary);
+}
+
+.btn-primary {
+  background: var(--gov-primary);
+  border-color: var(--gov-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--gov-primary-hover);
+  border-color: var(--gov-primary-hover);
+  color: #fff;
+}
+
+.btn-default {
+  background: var(--gov-surface);
+  border-color: var(--gov-border);
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 15px;
+}
+
+/* ========== 表格 政府规范 ========== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--gov-border);
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--gov-text);
+  background: var(--gov-primary-light);
+  border-bottom: 2px solid var(--gov-primary);
+}
+
+.table-zebra tbody tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+.table tbody tr:hover {
+  background: var(--gov-primary-light);
+}
+
+.table .empty {
+  color: var(--gov-text-muted);
+  text-align: center;
+  padding: 24px;
+}
+
+.table code.trace-code {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  background: var(--gov-bg);
+  padding: 4px 8px;
+  border-radius: var(--gov-radius);
+  border: 1px solid var(--gov-border);
+}
+
+.link {
+  color: var(--gov-primary);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* ========== 表单 ========== */
+.form-drawer {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--gov-bg);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius);
+}
+
+.form-drawer-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--gov-text);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-item label {
+  font-weight: 500;
+  color: var(--gov-text);
+  font-size: 14px;
+}
+
+.form-item input,
+.form-item select {
+  padding: 8px 12px;
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-item input:focus,
+.form-item select:focus {
+  outline: none;
+  border-color: var(--gov-primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 179, 0.15);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ========== 统计卡片 ========== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .stats-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--gov-shadow-card);
+}
+
+.stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gov-primary);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--gov-text-secondary);
+}
+
+/* ========== 状态与徽章 ========== */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-dot.ok {
+  background: var(--gov-success);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--gov-radius);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-ok {
+  background: var(--gov-success-bg);
+  color: var(--gov-success);
+}
+
+.badge-fail {
+  background: var(--gov-danger-bg);
+  color: var(--gov-danger);
+}
+
+.badge-mock {
+  background: var(--gov-warning-bg);
+  color: var(--gov-warning);
+}
+
+/* ========== 政府布局 ========== */
+.gov-layout {
+  width: 100%;
+}
+
+.gov-content {
+  width: 100%;
+}
+
+/* ========== 消费者溯源页 ========== */
+.page-consumer {
+  padding: 24px 0 48px;
+}
+
+.consumer-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.consumer-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--gov-text);
+  margin: 0 0 8px;
+}
+
+.consumer-desc {
+  font-size: 15px;
+  color: var(--gov-text-secondary);
+  margin: 0;
+}
+
+.query-card {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  padding: 24px;
+  box-shadow: var(--gov-shadow-card);
+}
+
+.query-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.input-lg {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius);
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.input-lg:focus {
+  outline: none;
+  border-color: var(--gov-primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 179, 0.15);
+}
+
+.trace-result {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.tip {
+  text-align: center;
+  color: var(--gov-text-secondary);
+  padding: 24px;
+  margin: 0;
+}
+
+.tip-error {
+  color: var(--gov-danger);
+}
+
+/* ========== 时间轴 鱼的一生 ========== */
+.timeline-card {
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--gov-radius-lg);
+  padding: 24px;
+  box-shadow: var(--gov-shadow-card);
+}
+
+.timeline-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gov-primary);
+  color: var(--gov-text);
+}
+
+.timeline {
+  margin: 0;
+  padding-left: 8px;
+}
+
+.timeline-node {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-left: 3px solid var(--gov-border);
+  margin-left: 12px;
+  padding-left: 24px;
+  position: relative;
+}
+
+.timeline-node:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.timeline-node-mock {
+  border-left-color: var(--gov-warning);
+}
+
+.node-marker {
+  position: absolute;
+  left: -16px;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gov-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-node-mock .node-marker {
+  background: var(--gov-warning);
+}
+
+.node-content {
+  flex: 1;
+}
+
+.node-step {
+  font-weight: 600;
+  color: var(--gov-text);
+  margin-bottom: 4px;
+}
+
+.node-name {
+  font-size: 14px;
+  color: var(--gov-text-secondary);
+  margin-bottom: 4px;
+}
+
+.node-detail {
+  font-size: 13px;
+  color: var(--gov-text-secondary);
+  margin-bottom: 4px;
+}
+
+.node-subject {
+  font-size: 12px;
+  color: var(--gov-text-muted);
+  margin-bottom: 2px;
+}
+
+.node-time {
+  font-size: 12px;
+  color: var(--gov-text-muted);
+}
+
+.timeline-card .muted {
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: var(--gov-text-muted);
+}
+
+/* ========== Footer ========== */
+.footer {
+  padding: 16px 24px;
+  font-size: 12px;
+  color: var(--gov-text-muted);
+  border-top: 1px solid var(--gov-border);
+  background: var(--gov-surface);
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-inner p {
+  margin: 0;
+}
