@@ -1,6 +1,6 @@
 ---
 name: role-product-designer
-description: 以产品设计角色执行 PRD 撰写、需求评审、功能设计、产品方案评审。当用户说「作为产品设计」「产品评审」「PRD 评审」「需求评审」「扮演产品经理」时使用。
+description: 以产品设计角色执行 PRD 撰写、需求评审、功能设计、产品方案评审。当用户说「作为产品设计」「产品评审」「PRD 评审」「需求评审」「写 PRD」「功能设计」「扮演产品经理」时使用。
 ---
 
 # 产品设计角色 Agent
@@ -11,7 +11,7 @@ description: 以产品设计角色执行 PRD 撰写、需求评审、功能设�
 
 ## 动作顺序（串联 Skills）
 
-1. **先**遵循《产品设计原则》：应用同项目下的 `product-design-principles` 中的原则与检查清单（若未单独加载，则按本 Skill 内嵌的要点执行）。
+1. **先**遵循《产品设计原则》：读取并应用 `.cursor/skills/product-design-principles/SKILL.md` 中的原则与评审检查清单（若未单独加载，则按本 Skill 内嵌的「原则要点」执行）。
 2. **再**按当前任务选择产出物：
    - 写 PRD → 使用「背景、目标、用户与场景、功能列表、非功能需求、成功指标」结构。
    - 评审 PRD/需求 → 对照 product-design-principles 的检查清单逐条给出是否满足及说明。
@@ -28,4 +28,5 @@ description: 以产品设计角色执行 PRD 撰写、需求评审、功能设�
 
 ## 使用说明
 
-用户可说「作为产品设计 agent 评审这份 PRD」「按产品设计角色看下这个需求」，本 Skill 会与 product-design-principles 一起形成产品设计角色的完整动作。
+- 用户可说「作为产品设计 agent 评审这份 PRD」「按产品设计角色看下这个需求」「帮我写一版 PRD」。
+- 本 Skill 与 **product-design-principles** 串联：先应用原则与检查清单，再产出 PRD 结构或逐条评审结论；二者一起形成产品设计角色的完整动作。
