@@ -98,6 +98,14 @@ description: 用第三人称写：这个技能做什么；在什么情况下使�
 - **update-cursor-settings**：改 Cursor/VSCode 设置（主题、字体、format on save 等）。
 - **migrate-to-skills**：把「按需应用的规则」或斜杠命令迁移成 Skills 格式。
 
+### 2.8 本仓库项目内 Skills（.cursor/skills/）
+
+除上述内置技能外，本仓库在 `.cursor/skills/` 下还提供：
+
+- **skill-learner-developer**：从市场学习 skills、开发新 skill、优化既有 skill 的 meta-skill。说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」时使用；内含 SkillsMP、Agent Skills Guide、Anthropic/skills 等来源与开发/优化检查清单。
+- **development-principles** / **code-standards** / **architecture-principles** / **product-design-principles**：原则与检查清单。
+- **role-developer** / **role-architect** / **role-product-designer**：角色 Agent，串联对应原则类 skill。
+
 ---
 
 ## 三、Rules 详解
@@ -241,6 +249,7 @@ alwaysApply: false
 | 新建/改规则或 RULE | create-rule | 「加一条规则」「.cursor/rules 怎么用」 |
 | 改 Cursor 设置 | update-cursor-settings | 「字体调大」「保存时格式化」等 |
 | 把现有 rules/commands 转成 skills | migrate-to-skills | 「把项目里的 rules/commands 迁移成 skills」 |
+| 从市场学 skills / 开发或优化 skill | skill-learner-developer | 「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」 |
 
 ---
 

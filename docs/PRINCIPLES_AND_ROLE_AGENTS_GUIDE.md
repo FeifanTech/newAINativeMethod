@@ -95,7 +95,9 @@
 │   └── SKILL.md
 ├── role-architect/               # 角色：串联 架构原则 + 可选 ADR
 │   └── SKILL.md
-└── role-developer/              # 角色：串联 代码规范 + 审查清单
+├── role-developer/              # 角色：串联 代码规范 + 审查清单
+│   └── SKILL.md
+└── skill-learner-developer/     # meta-skill：从市场学 skills、开发/优化 skill
     └── SKILL.md
 ```
 
@@ -219,7 +221,9 @@ roles:
 │   └── SKILL.md
 ├── role-architect/
 │   └── SKILL.md
-└── role-developer/
+├── role-developer/
+│   └── SKILL.md
+└── skill-learner-developer/
     └── SKILL.md
 ```
 
@@ -227,6 +231,7 @@ roles:
 
 - **仅用原则**：对 Cursor 说「按我们的产品设计原则评审这段 PRD」「按架构原则看下这个技术方案」「按代码规范做一次 Code Review」，会匹配到对应原则 Skill。  
 - **用角色**：对 Cursor 说「作为产品设计 agent 评审这个需求」「作为架构师给这个方案提意见」「作为开发 agent 按规范审查这段代码」，会匹配到角色 Skill，从而串联对应原则（并可按角色 Skill 里的顺序执行）。
+- **学/写/优化 Skill**：对 Cursor 说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」，会匹配到 **skill-learner-developer**，按市场来源（SkillsMP、Agent Skills Guide、Anthropic/skills）与开发/优化检查清单执行。
 
 ---
 
