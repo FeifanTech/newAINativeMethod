@@ -1,7 +1,7 @@
 # 千岛湖全鱼品溯源平台 · 技术方案
 
 > 依据《技术架构原则》：简单优于复杂、边界清晰、可观测、可演进、安全与合规。  
-> 对应 PRD：[QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md](./QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md)（**v0.4**）。  
+> 对应 PRD：[QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md](../product/QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md)（**v0.4**）。  
 > **范围边界**：**流通环节（储运、入库/出库、配送等）由蚂蚁数科团队已建成**；本技术方案仅覆盖流通前环节（种源/投放、养殖/捕捞、加工、检测）及**与蚂蚁数科流通系统的对接**、溯源码与销售绑定（责任边界见 PRD 4.E）、溯源查询与监管。  
 > **v0.4 对齐**：PRD v0.4 补充**上下游数量约束与校验**（养殖批次剩余可用数量、加工消耗累计、换算规则）；本方案在批次与溯源服务、数据模型与接口中同步体现。
 

@@ -1,6 +1,6 @@
 # 千岛湖全鱼品溯源平台 · 工作量评估与技术风险分析
 
-> 依据《技术架构原则》对 [技术方案](./QIANDAO_LAKE_TRACEABILITY_TECH_SOLUTION.md)（**v0.4**）做初步评估。  
+> 依据《技术架构原则》对 [技术方案](../architecture/QIANDAO_LAKE_TRACEABILITY_TECH_SOLUTION.md)（**v0.4**）做初步评估。  
 > 与 PRD [QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md](./QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md)（**v0.4**）及三阶段实施路线对齐。  
 > **范围边界**：**流通环节由蚂蚁数科团队已建成**；本评估仅覆盖流通前环节及**与蚂蚁数科流通系统对接**、溯源码与销售绑定（责任边界见 PRD 4.E）。  
 > 本文档为**初步评估**，实际排期需结合团队规模、蚂蚁链与蚂蚁数科对接节奏与客户验收节点再细化。
