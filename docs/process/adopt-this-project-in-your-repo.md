@@ -33,6 +33,11 @@
 - 参考 [docs/process/github-actions-example.md](./github-actions-example.md) 在业务仓配置 PR 审查等 CI。
 - 本仓提供的是**示例配置**，需在业务仓中替换 API Key、触发条件等。
 
+### 1.5 （可选）在业务仓增加项目记忆 memory/
+
+- 若希望**跨会话保持上下文、减少 AI 失忆与幻觉**，可在业务仓库根目录增加一个 `memory/` 目录，用项目内文件做「项目级、会话级」记忆：当前任务、近期决策、工程约定等写入该目录，会话前后让 AI 先读再写（或由你按会话总结更新）。这样每次自然语言协作都能沉淀为可复用上下文，第二天/下周继续聊也不会断片。
+- 与本仓的 docs/、Skills 是**互补**的：docs 放已定稿产出（PRD、技术方案），memory 放进行中的工作记忆（product/engineering/decisions/tasks/changelog/scratchpad 等）。本仓在此仅说明该可选能力；是否采用、是否接入具备中长短期记忆能力的外部服务，由业务仓自行决定。具体文件结构与会话协议可参考本仓 [tmp/memory.md](../../tmp/memory.md) 中的方案思路。
+
 ---
 
 ## 二、建议的标准工作流
@@ -44,6 +49,8 @@
 | **开发** | 拆任务、实现、自检 | implementation-plan、role-developer、development-principles、code-standards |
 | **Review** | Code Review、方案评审、PRD 评审 | role-developer + code-standards；role-architect；role-product-designer |
 | **发布** | 提交、发布说明 | 建议 commit 信息与需求/任务关联；可选 release-notes 类 skill |
+
+- **（可选）项目记忆**：在业务仓维护 `memory/` 时，可在开发与协作阶段让 AI 会话前后读/写 project state，以保持跨会话一致性；详见上文 1.5。
 
 ---
 
