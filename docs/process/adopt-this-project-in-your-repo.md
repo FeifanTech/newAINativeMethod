@@ -18,7 +18,16 @@
   - **通用**：`architecture-principles`、`role-architect`、`product-design-principles`、`role-product-designer`、`development-principles`、`code-standards`、`role-developer`。
   - **可选**：`design-review-checklist`、`implementation-plan`、`skill-learner-developer`。
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
-- 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。
+- 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。
+
+#### 如何接入基线技能（使用 sync-skills.sh）
+
+- 在业务仓中一键拉取并更新基线仓的 `.cursor/skills`，使全团队使用同一套技能与架构标准。
+- **步骤**：
+  1. 将本仓 [scripts/sync-skills.sh](../../scripts/sync-skills.sh) 复制到业务项目**根目录**下的 `scripts/` 中（若无则新建 `scripts` 目录）。
+  2. 在业务仓根目录执行：`chmod +x scripts/sync-skills.sh && ./scripts/sync-skills.sh`。
+  3. （可选）将此命令加入 CI/CD 流水线或 npm `postinstall` 钩子，在每次 build 或 install 时拉取最新技能。
+- **语义**：基线仓中的 skill 会**覆盖**本地同名目录；业务仓独有 skill（基线仓中不存在的目录）会**保留**。依赖：git（2.25+ 支持 sparse-checkout）、rsync（Mac/Linux 常见；Windows 可用 WSL 或 Git Bash）。
 
 ### 1.3 使用文档模板
 
