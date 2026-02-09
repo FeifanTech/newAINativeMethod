@@ -18,6 +18,8 @@
 | | doc-reflector | 代码变更后反向更新 docs/ 下 PRD 或架构文档（防漂移） |
 | **架构 (扩展)** | design-review-checklist | 设计文档架构维度审查，逐条给出结论 |
 | **Ops (可选)** | k8s-deploy-guard | K8s/Docker 部署配置守卫（资源、安全、探针） |
+| **发布与汇总** | release-notes-from-commits | 根据 commit/PR 列表生成 Release Notes 草稿 |
+| | decisions-summary | 汇总 memory/decisions 或 ADR 的已采纳决策摘要 |
 
 ## 标准工作流与 Skills 对应
 
@@ -29,6 +31,8 @@
 | Review | role-developer + code-standards（Code Review）；role-architect（方案评审）；role-product-designer（PRD 评审） |
 | 代码变更→文档同步 | doc-reflector（根据代码变更更新 PRD/架构文档） |
 | 部署 / K8s | k8s-deploy-guard（部署配置守卫） |
+| 发版 / Release Notes | release-notes-from-commits（从 commit 生成发布说明） |
+| 决策汇总 | decisions-summary（汇总已采纳决策） |
 | 学技能 / 写技能 | skill-learner-developer |
 
 ## 业务仓复制建议
