@@ -31,3 +31,10 @@ CURSOR.md           # 本仓与 Cursor 的约定
 - PRD：`docs/product/QIANDAO_LAKE_FISHERY_TRACEABILITY_PRD.md`
 - 技术方案：`docs/architecture/QIANDAO_LAKE_TRACEABILITY_TECH_SOLUTION.md`
 - Demo：`projects/qiandao-lake-traceability-demo/`
+
+## 基线仓与业务仓协同
+
+- **全景图与执行清单**：见 **docs/overview.md** 的「五、基线仓与业务仓协同全景」（Mermaid 图）与「六、立即执行清单」。
+- **分发**：业务仓使用 `scripts/sync-skills.sh` 从本仓同步 `.cursor/skills`。
+- **防漂移**：Skill `doc-reflector` 在代码变更后反向更新 `docs/` 下 PRD/架构文档。
+- **Ops**：Skill `k8s-deploy-guard` 在编写 K8s/Docker 配置时做资源、安全与探针检查。

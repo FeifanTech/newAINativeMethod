@@ -54,5 +54,54 @@
 
 ---
 
+## 五、基线仓与业务仓协同全景
+
+下图说明基线仓（本仓）与业务仓如何通过 Skills 同步、文档反向同步与部署守卫协同运作。
+
+```mermaid
+graph TD
+    subgraph Baseline_Repo [🏢 基线仓: FeifanTech/newAINativeMethod]
+        Skills[.cursor/skills/]
+        Docs[docs/ 标准文档]
+        Demo[projects/ 样板Demo]
+    end
+
+    subgraph Business_Repo [🏭 业务仓]
+        SyncScript[sync-skills.sh]
+        LocalSkills[.cursor/skills/]
+        BizCode[业务代码]
+        BizDocs[docs/ 业务 PRD]
+    end
+
+    Skills -->|rsync| SyncScript
+    SyncScript -->|更新| LocalSkills
+
+    LocalSkills -->|包含| Reflector[doc-reflector]
+    BizCode -->|修改触发| Reflector
+    Reflector -->|反向更新| BizDocs
+
+    LocalSkills -->|包含| OpsGuard[k8s-deploy-guard]
+    OpsGuard -->|审计| BizCode
+
+    style Baseline_Repo fill:#e1f5fe,stroke:#01579b
+    style Business_Repo fill:#fff3e0,stroke:#e65100
+    style Reflector fill:#e8f5e9,stroke:#2e7d32
+```
+
+---
+
+## 六、立即执行清单 (Action Plan)
+
+团队可按以下清单在业务仓或本仓中落地/维护这套机制：
+
+| 步骤 | 内容 | 说明 |
+|------|------|------|
+| **1** | 创建并维护同步脚本 | 本仓已提供 `scripts/sync-skills.sh`；业务仓复制到 `scripts/` 后执行即可从基线仓拉取最新 `.cursor/skills`。可选：加入 CI 或 postinstall。 |
+| **2** | 创建/同步技能 | 本仓已包含 `doc-reflector`（代码变更→文档反向更新）、`k8s-deploy-guard`（K8s/部署配置守卫）。业务仓通过 sync-skills.sh 或手动拷贝即可获得。 |
+| **3** | （可选）泛化与参考 | 若有溯源/存证类新项目，可参考 `docs/product/`、`docs/architecture/` 下千岛湖相关文档与 `projects/qiandao-lake-traceability-demo` 作为 Reference；无需在本仓新增泛化 Skill 时跳过。 |
+| **4** | 更新文档与清单 | 在 README 或本总览中引用「五、基线仓与业务仓协同全景」的 Mermaid 图，说明分发、防漂移、Ops 守卫的运行逻辑；本清单便于团队按步骤执行。 |
+
+---
+
 **文档版本**：v0.1  
 **维护**：随本仓结构或流程变更更新本总览。

@@ -15,7 +15,9 @@
 | | role-developer | 开发角色：实现、Code Review、规范自检 |
 | | implementation-plan | 根据需求/设计拆解成可执行开发任务列表 |
 | | skill-learner-developer | Skill 学习与开发（从市场学、写新 skill、优化既有） |
+| | doc-reflector | 代码变更后反向更新 docs/ 下 PRD 或架构文档（防漂移） |
 | **架构 (扩展)** | design-review-checklist | 设计文档架构维度审查，逐条给出结论 |
+| **Ops (可选)** | k8s-deploy-guard | K8s/Docker 部署配置守卫（资源、安全、探针） |
 
 ## 标准工作流与 Skills 对应
 
@@ -25,6 +27,8 @@
 | 设计 / 技术方案 | role-architect、architecture-principles |
 | 开发 / 实现 | role-developer、development-principles、code-standards |
 | Review | role-developer + code-standards（Code Review）；role-architect（方案评审）；role-product-designer（PRD 评审） |
+| 代码变更→文档同步 | doc-reflector（根据代码变更更新 PRD/架构文档） |
+| 部署 / K8s | k8s-deploy-guard（部署配置守卫） |
 | 学技能 / 写技能 | skill-learner-developer |
 
 ## 业务仓复制建议
