@@ -113,6 +113,14 @@ description: <一句话说明用途与触发场景。当用户说「…」时使
 
 ---
 
+## 与 memory/ 的联动（可选）
+
+- 若当前仓库存在 `memory/` 目录，且本次**新增或优化了 skill**，可将本次变更摘要追加到 `memory/changelog.md`：日期、新增/优化了哪个 skill、主要变更点。
+- 若为尚未验证的写法或待对比的市场示例，可先记入 `memory/scratchpad.md`，待验证后再写入长期记忆。
+- 若不存在 `memory/`，则跳过本段，不报错。
+
+---
+
 ## 工作结束后的默认动作
 
 - **提交 GitHub**：任务或迭代完成后，默认执行或明确建议用户执行「提交到 GitHub」（`git add` → `git commit` → `git push`），避免工作结束未提交导致无法回滚；commit 信息需清晰、可与需求/任务关联（如 `chore(skills): 新增/优化 xxx skill`）。
