@@ -20,7 +20,7 @@ description: 以架构师角色执行技术方案设计、架构评审、技术�
    - 写技术方案 → 使用「背景、目标、架构图、核心模块、接口与数据流、选型理由、风险与回滚」结构。
    - 评审技术方案 → 对照 architecture-principles 的检查清单逐条给出是否满足及说明。
 3. **输出时**标明：依据的原则、检查项与结论。
-4. **若项目技术栈为 Java/Spring**：结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单逐项审查并给出结论（满足/不满足/风险 + 建议）。
+4. **若项目技术栈为 Java/Spring、Python/FastAPI 或 Django、TypeScript/Node/Nest**：结合对应 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md`、`PYTHON_ENTERPRISE_CHECKLIST.md` 或 `TS_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单逐项审查并给出结论（满足/不满足/风险 + 建议）。
 
 ## 原则要点（与 architecture-principles 对齐）
 

@@ -22,10 +22,12 @@ description: 开发原则与交付质量清单。在迭代规划、开发过程�
 - [ ] 接口/契约变更是否与调用方对齐、有文档或版本说明？
 - [ ] 是否有不必要的阻塞依赖或等待？
 
-## Java 企业级（可选）
+## 企业级检查清单（可选，按技术栈择一）
 
-- 若项目为 **Java 企业级应用**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（2.1～2.8）自检，并给出结论与建议（满足/不满足/风险 + 建议）。
-- 若项目非 Java，则跳过本段。
+- 若项目为 **Java 企业级应用**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（2.1～2.8）自检，并给出结论与建议。
+- 若项目为 **Python 企业级应用**，请结合 `docs/architecture/PYTHON_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（2.1～2.8）自检，并给出结论与建议。
+- 若项目为 **TypeScript/Node 企业级应用**，请结合 `docs/architecture/TS_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（2.1～2.8）自检，并给出结论与建议。
+- 非上述技术栈可跳过本段。
 
 ## 产出物建议
 

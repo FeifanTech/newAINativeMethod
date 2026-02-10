@@ -22,7 +22,7 @@
 
 | 目录 | 说明 |
 |------|------|
-| **docs/architecture/** | 架构与数据密集型应用方法论、技术方案、ADR 等；含 **Java 企业级检查清单**（可选，见 JAVA_ENTERPRISE_CHECKLIST.md）。 |
+| **docs/architecture/** | 架构与数据密集型应用方法论、技术方案、ADR 等；含 **企业级检查清单**（可选，按技术栈：JAVA / PYTHON / TS，见对应 CHECKLIST.md）。 |
 | **docs/product/** | PRD、产品文档、工作量与风险分析等。 |
 | **docs/process/** | 研发流程、Code Review、AI 使用规范、Skills 指南、业务仓采纳指南等。 |
 | **.cursor/skills/** | 与上述原则对应的 Skills 集合（core / product / architecture），供 Cursor 匹配使用。 |
@@ -40,7 +40,7 @@
 
 更细的步骤见 **docs/process/adopt-this-project-in-your-repo.md**。
 
-- **Java 企业级（可选）**：若项目为 Java/Spring 技术栈，架构与编码类 Skill 会结合 **docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md** 逐项审查并给出结论；非 Java 项目可跳过。
+- **企业级检查清单（可选）**：若项目为 **Java/Spring**、**Python/FastAPI 或 Django**、**TypeScript/Node/Nest**，架构与编码类 Skill 会结合 **docs/architecture/** 下对应 CHECKLIST（JAVA / PYTHON / TS）逐项审查并给出结论；其他技术栈可跳过。
 
 ---
 

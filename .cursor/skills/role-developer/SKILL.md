@@ -21,7 +21,7 @@ description: 以开发角色执行代码实现、迭代交付、Code Review、�
    - 写代码/重构/迭代 → 按 development-principles 小步交付、质量门禁，按 code-standards 的命名、职责、异常处理、可测试性执行。
    - Code Review/质量检查 → 对照 development-principles 与 code-standards 的检查清单逐条给出是否满足及修改建议。
 4. **输出时**对审查项标明：满足/不满足/建议，并尽量给出具体代码示例。
-5. **若项目为 Java 企业级应用**：结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单自检/审查，并给出结论与建议（满足/不满足/风险 + 建议）；严重问题（如安全、并发）单独标注。
+5. **若项目为 Java/Python/TypeScript 企业级应用**：结合对应 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md`、`PYTHON_ENTERPRISE_CHECKLIST.md` 或 `TS_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单自检/审查，并给出结论与建议；严重问题（如安全、并发）单独标注。
 
 ## 原则要点（与 development-principles、code-standards 对齐）
 

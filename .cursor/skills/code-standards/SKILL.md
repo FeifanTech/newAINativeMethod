@@ -29,10 +29,12 @@ description: 提供代码规范与 Code Review 清单，用于编写代码、审
 
 **输出要求**：做 Code Review 时逐条对照上述检查项，标明「满足/不满足/建议」，并尽量给出具体代码示例或修改建议。（参考市场：输出明确、可执行）
 
-## Java 企业级（可选）
+## 企业级检查清单（可选，按技术栈择一）
 
-- 若项目为 **Java 企业级应用**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（含 2.6 安全、2.7 并发）逐项审查，并给出结论与建议；如发现明显严重问题（如 SQL 拼接、日志输出敏感信息），应单独标注为高优先级。
-- 若项目非 Java，则跳过本段。
+- 若项目为 **Java 企业级应用**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（含 2.6 安全、2.7 并发）逐项审查，并给出结论与建议。
+- 若项目为 **Python 企业级应用**，请结合 `docs/architecture/PYTHON_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（含 2.6 安全、2.7 并发）逐项审查，并给出结论与建议。
+- 若项目为 **TypeScript/Node 企业级应用**，请结合 `docs/architecture/TS_ENTERPRISE_CHECKLIST.md` 第二、编码与实现检查清单（含 2.6 安全、2.7 并发）逐项审查，并给出结论与建议。
+- 如发现明显严重问题（如 SQL 拼接、日志输出敏感信息），应单独标注为高优先级；非上述技术栈可跳过本段。
 
 ## 示例（Java，可按语言替换）
 

@@ -34,10 +34,12 @@ description: 提供技术架构原则与方案评审清单，用于编写或评�
 - **ADR**：背景、决策、后果；可放在 `references/adr-templates.md` 供引用。
 - **评审结论**：逐条对照上述检查项，标明「满足/不满足/待补充」及简短说明；每条检查项必须给出结论。（参考市场：输出明确、可核对）
 
-## Java 企业级（可选）
+## 企业级检查清单（可选，按技术栈择一）
 
-- 若项目技术栈为 **Java/Spring**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单（1.1～1.7），逐项审查并给出结论（满足/不满足/风险 + 建议）；每个维度必须给出结论，不能只罗列问题。
-- 若项目非 Java，则跳过本段。
+- 若项目技术栈为 **Java/Spring**，请结合 `docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单（1.1～1.7），逐项审查并给出结论（满足/不满足/风险 + 建议）。
+- 若项目技术栈为 **Python/FastAPI 或 Django**，请结合 `docs/architecture/PYTHON_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单（1.1～1.7），逐项审查并给出结论。
+- 若项目技术栈为 **TypeScript/Node/Nest**，请结合 `docs/architecture/TS_ENTERPRISE_CHECKLIST.md` 第一、架构设计检查清单（1.1～1.7），逐项审查并给出结论。
+- 每个维度必须给出结论，不能只罗列问题；非上述技术栈可跳过本段。
 
 ## 与 memory/ 的联动（可选）
 
