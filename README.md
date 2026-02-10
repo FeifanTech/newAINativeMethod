@@ -39,4 +39,4 @@ CURSOR.md           # 本仓与 Cursor 的约定
 - **防漂移**：Skill `doc-reflector` 在代码变更后反向更新 `docs/` 下 PRD/架构文档。
 - **Ops**：Skill `k8s-deploy-guard` 在编写 K8s/Docker 配置时做资源、安全与探针检查。
 - **Release Notes 与决策汇总**：Skill `release-notes-from-commits`、`decisions-summary` 用于自动生成发布说明草稿与决策摘要；使用说明与 CI 示例见 **docs/process/release-notes-and-decisions.md**。
-- **Release Notes 与决策汇总**：Skill `release-notes-from-commits`、`decisions-summary` 用于自动生成发布说明与决策摘要；使用说明与 CI 示例见 **docs/process/release-notes-and-decisions.md**。
+- **Java 企业级（可选）**：若项目为 Java/Spring 技术栈，架构与编码类 Skill 会结合 **docs/architecture/JAVA_ENTERPRISE_CHECKLIST.md** 逐项审查并给出结论；非 Java 项目可跳过。详见该文档。
