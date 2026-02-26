@@ -59,6 +59,21 @@
   - 工作量与风险：`docs/product/QIANDAO_LAKE_TRACEABILITY_EFFORT_AND_RISKS.md`
 - **示范路径**：PRD → 技术方案 → 工作量与风险 → Demo 实现；各阶段可由 Cursor 结合对应 Skills 生成草稿，人工审阅后采纳。
 
+### 标杆案例详解
+
+详细的项目过程记录见 **docs/case-studies/qiandao-lake-traceability/**：
+
+| 文档 | 内容 |
+|------|------|
+| [README.md](../case-studies/qiandao-lake-traceability/README.md) | 案例索引与结构 |
+| [1_overview.md](../case-studies/qiandao-lake-traceability/1_overview.md) | 项目概述 |
+| [2_requirements/](../case-studies/qiandao-lake-traceability/2_requirements/) | 需求阶段：原始需求→AI PRD草稿→审核→定稿 |
+| [3_architecture/](../case-studies/qiandao-lake-traceability/3_architecture/) | 架构阶段：设计需求→AI方案草稿→审核→定稿 |
+| [4_implementation/](../case-studies/qiandao-lake-traceability/4_implementation/) | 实施阶段：任务拆解→代码生成→踩坑记录 |
+| [5_review/](../case-studies/qiandao-lake-traceability/5_review/) | 复盘总结 |
+
+这个案例展示了完整的 AI-native 工作流程，包括 Human Gate 决策、经验沉淀等最佳实践。
+
 ---
 
 ## 五、基线仓与业务仓协同全景
