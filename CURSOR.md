@@ -15,6 +15,12 @@
 | 生成可复用的草稿、模板、检查清单，供人工或业务仓采纳 | 不要在本仓外执行提交、部署等会改变业务环境的操作 |
 | 按 docs/ 与 .cursor/skills/ 的约定做**评审、建议、拆任务** | 涉及业务仓时，仅输出「可拷贝的片段」或「在业务仓中建议执行的步骤」 |
 
+## Skills 使用约定（强制）
+
+- **每次响应前**：必须执行 **using-skills** 的检查逻辑——判断当前任务是否涉及架构/设计/代码/需求/调试/Skill 开发等；若涉及，必须加载并遵循对应 Skill（architecture-principles、code-standards、development-principles、product-design-principles、systematic-debugging、skill-learner-developer 等）。
+- 若任务已有 **Level 1 Plan**（AI-DLC），按 Plan 中「建议使用的 Skills」加载；执行任一 **Stage** 时须加载该 Stage 对应 Skill。**Human Gate** 须由人确认。
+- 详见 `.cursor/skills/using-skills/SKILL.md`。
+
 ## 在本仓库中的主要任务
 
 1. **生成/完善规范与模板**：PRD 模板、技术方案结构、评审检查清单等，放在 `docs/` 对应目录。

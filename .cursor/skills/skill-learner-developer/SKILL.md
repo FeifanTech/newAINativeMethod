@@ -39,6 +39,16 @@ description: 从市场学习 skills、开发新 skill、优化既有 skill 的 m
 
 ## 二、开发新 Skill
 
+### 2.0 Skill 开发工作流（TDD，建议用于核心 Skill）
+
+**原则**：若未观察过 AI 在没有该 Skill 时的失败行为，就不知道 Skill 是否教对了。核心 Skill（architecture-principles、code-standards、development-principles、product-design-principles）建议按本流程开发或优化。
+
+- **RED（观察失败）**：在写/改 Skill 前，先设计一个最小测试场景（如「让 AI 实现订单创建接口」），**临时移除或禁用**相关 Skill，让 AI 执行该任务；记录 AI 的**具体错误行为**与**合理化借口**（如「简单 CRUD 不需要分层」）。
+- **GREEN（写 Skill 解决问题）**：针对观察到的错误与借口，在 Skill 中增加**红旗清单**（可观察行为 + 常见借口，触达即停）与**强制流程/正确示例**；再启用 Skill 重跑同一场景，验证行为是否改变。
+- **REFACTOR（优化）**：简化表述、补充示例与边界情况；若发现新的借口或错误，补充到红旗清单。
+
+详细步骤与模板见 **docs/process/skill-development-workflow.md**。与 AI-DLC 一致：本流程产出的 Skill 对应可执行的 **Stage**，Plan 中「建议使用的 Skills」可引用本仓 Skill。
+
 ### 2.1 SKILL.md 基本结构
 
 ```markdown
@@ -129,4 +139,4 @@ description: <一句话说明用途与触发场景。当用户说「…」时使
 
 ## 使用说明
 
-用户可说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」「写一个能学习和优化 skills 的 skill」，本 Skill 将按「学习→开发→优化」三部分执行；需要时先到 SkillsMP / Agent Skills Guide / Anthropic 查示例再落笔。
+用户可说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」「写一个能学习和优化 skills 的 skill」，本 Skill 将按「学习→开发→优化」三部分执行；需要时先到 SkillsMP / Agent Skills Guide / Anthropic 查示例再落笔。**核心 Skill** 开发/优化时，须按 2.0 的 TDD 工作流（RED–GREEN–REFACTOR）执行，详见 **docs/process/skill-development-workflow.md**。

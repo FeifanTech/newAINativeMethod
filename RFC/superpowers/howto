@@ -1,0 +1,1314 @@
+# obra/superpowers 深度分析与借鉴建议
+
+## 📊 执行总结
+
+obra/superpowers 是一个非常成熟的 agentic skills framework，专注于软件开发全流程。通过分析其设计理念，我发现了**5个核心创新点**可以直接借鉴到你们的 AI-Native 研发体系中。
+
+---
+
+## 🔍 obra/superpowers 核心理念分析
+
+### 1. 核心定位
+
+**Superpowers 是什么**：
+> "A complete software development workflow for your coding agents, built on top of a set of composable skills"
+
+**关键特征**：
+- 不仅仅是 Skills 库，而是**完整的开发工作流**
+- Skills 是**强制执行**的，不是建议
+- 自动触发机制：AI 必须在任何响应前检查 Skills
+
+---
+
+## 💡 5大核心创新点（值得借鉴）
+
+### 创新1：强制工作流，而非建议 ⭐⭐⭐⭐⭐
+
+#### Superpowers 的做法
+
+**核心原则**：
+```markdown
+# skills/using-superpowers/SKILL.md
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. 
+YOU MUST USE IT.
+This is not negotiable. This is not optional.
+```
+
+**强制触发机制**：
+```
+用户消息 → AI必须先检查Skills → 即使1%可能性也要调用 → 才能响应
+```
+
+**流程图**：
+```
+用户消息
+    ↓
+检查是否需要brainstorming?
+    ↓ 是
+调用brainstorming skill
+    ↓
+是否有其他相关skill? (即使1%可能)
+    ↓ 是
+调用Skill tool加载skill
+    ↓
+宣布："Using [skill] to [purpose]"
+    ↓
+skill有checklist?
+    ↓ 是
+创建Todo（每个检查项一个）
+    ↓
+严格遵循skill执行
+    ↓
+响应用户（包括澄清问题）
+```
+
+#### 我们当前的问题
+- Skills 是"参考指南"，AI 可能选择性使用
+- 缺少强制检查机制
+- AI 可能跳过 Skills 直接生成代码
+
+#### 借鉴方案
+
+**在 `.cursor/skills/` 下创建元 Skill**：
+
+`.cursor/skills/core/using-skills.md`：
+```markdown
+---
+name: using-skills
+description: "核心元技能，在任何响应前必须执行。定义如何强制检查和使用Skills。"
+version: 1.0.0
+category: core
+priority: critical
+mandatory: true  # 标记为强制执行
+---
+
+# 使用 Skills 的强制规则
+
+## 核心原则
+
+**IF A SKILL APPLIES TO YOUR TASK, YOU MUST USE IT.**
+
+这不是建议，是强制要求：
+- ✅ 在任何响应前，必须检查是否有相关 Skill
+- ✅ 即使只有 1% 的可能性相关，也必须加载检查
+- ✅ 不能跳过，不能合理化逃避
+- ✅ 如果 Skill 确实不适用，才可以继续
+
+## 强制检查流程
+
+### Step 1：收到用户消息
+无论消息是什么（需求、Bug、代码审查等），立即进入 Skill 检查流程。
+
+### Step 2：Skill 相关性检查
+问自己：
+- 这是架构设计吗？→ 加载 architecture-baseline
+- 这涉及安全吗？→ 加载 security-baseline
+- 这是写代码吗？→ 加载 coding-standards
+- 这是 Debug 吗？→ 加载 systematic-debugging
+- 这是需求分析吗？→ 加载 requirement-analysis
+
+**关键规则**：即使只有 1% 可能性，也必须加载！
+
+### Step 3：宣布 Skill 使用
+在响应用户前，明确宣布：
+```
+"我正在使用 [Skill名称] 来 [目的]"
+```
+
+例如：
+- "我正在使用 architecture-baseline 来确保代码符合DDD分层规范"
+- "我正在使用 security-baseline 来检查是否有SQL注入风险"
+
+### Step 4：创建检查清单
+如果 Skill 有检查清单：
+- 为每个检查项创建一个内部 Todo
+- 逐项验证
+- 全部通过才继续
+
+### Step 5：严格遵循 Skill
+- 不要合理化逃避（"这次情况特殊"）
+- 不要跳过步骤（"我已经知道了"）
+- 不要自创规则（"我有更好的方法"）
+
+### Step 6：响应用户
+只有在完成 Skill 检查后，才能响应用户。
+
+## 常见合理化借口（禁止！）
+
+### ❌ "这次情况特殊，不需要遵循 Skill"
+→ **错误**！没有特殊情况，Skill 就是为各种情况设计的
+
+### ❌ "我已经很了解最佳实践了"
+→ **错误**！Skill 是组织标准，不是你个人的知识
+
+### ❌ "用户很急，没时间检查"
+→ **错误**！不检查反而会导致返工，更浪费时间
+
+### ❌ "这只是个小改动，不重要"
+→ **错误**！小改动也可能引入大问题
+
+### ❌ "我理解 Skill 的精神，不需要照搬"
+→ **错误**！必须按字面意思执行，不是理解精神
+
+## 自检问题
+
+在响应用户前，问自己：
+- [ ] 我检查了所有可能相关的 Skills 吗？（即使 1% 可能）
+- [ ] 我宣布了我正在使用的 Skill 吗？
+- [ ] 我完成了 Skill 的检查清单吗？
+- [ ] 我是否在合理化逃避某个步骤？
+
+如果任何一项答案是"否"，**停止响应，回到 Step 1**。
+
+## 示例对话
+
+### ✅ 正确的流程
+
+**用户**："帮我写一个订单服务的 CRUD 接口"
+
+**AI**：
+```
+[内部检查]
+- 这是写代码 → 需要 coding-standards
+- 这是架构相关 → 需要 architecture-baseline
+- 这涉及数据库 → 可能需要 performance-baseline
+
+[加载 Skills]
+- architecture-baseline.md
+- coding-standards.md
+- performance-baseline.md
+
+[宣布]
+"我正在使用以下 Skills 来确保代码质量：
+- architecture-baseline：确保符合 DDD 分层
+- coding-standards：确保命名和格式规范
+- performance-baseline：确保数据库查询有索引
+
+让我根据 architecture-baseline 的要求，按照 Interface → Application → Domain → Infrastructure 的分层来实现..."
+
+[生成代码，严格遵循 Skills]
+```
+
+### ❌ 错误的流程
+
+**用户**："帮我写一个订单服务的 CRUD 接口"
+
+**AI**：
+```
+"好的，我来帮你写一个订单服务接口：
+
+@RestController
+public class OrderController {
+    @Autowired
+    private OrderMapper orderMapper;
+    ...
+}
+```
+
+**问题**：
+- 没有检查 Skills
+- 没有宣布使用的 Skills
+- 直接生成代码，违反了 DDD 分层规范（Controller 直接依赖 Mapper）
+```
+
+## 紧急情况处理
+
+### 场景：用户明确说"跳过检查，快点"
+
+**错误做法**：
+```
+"好的，我直接帮你写..."
+```
+
+**正确做法**：
+```
+"我理解你很急，但跳过 Skills 检查可能导致代码不符合组织规范，
+在 Code Review 阶段被打回，反而更浪费时间。
+
+让我快速执行必要的检查（大约需要10秒）..."
+```
+
+---
+
+## 元规则：关于 using-skills 这个 Skill 本身
+
+**这个 Skill（using-skills）是元 Skill**：
+- 它定义了如何使用其他 Skills
+- 它本身必须首先被加载
+- 它是唯一可以"无条件触发"的 Skill
+- 所有其他 Skills 都在它的控制下
+
+**bootstrap 机制**：
+每次会话开始时，AI 的第一个动作就是加载 using-skills，
+然后用它来检查是否需要加载其他 Skills。
+```
+
+**效果**：
+- AI 不再跳过 Skills 检查
+- 所有代码生成都符合组织规范
+- Code Review 返工率大幅下降
+
+---
+
+### 创新2：TDD 驱动的 Skill 开发 ⭐⭐⭐⭐⭐
+
+#### Superpowers 的做法
+
+**核心理念**：
+> "If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing."
+
+**Skill 开发流程（RED-GREEN-REFACTOR）**：
+
+```markdown
+# skills/writing-skills/SKILL.md
+
+## RED（红灯）：先看 Agent 失败
+
+1. 在没有 Skill 的情况下，让 subagent 执行任务
+2. 记录 Agent 的**具体错误行为**
+3. 记录 Agent 的**合理化借口**
+
+示例：
+- Agent 说："我先写代码，测试稍后补"（违反 TDD）
+- Agent 说："我已经手动测试了"（合理化逃避）
+- Agent 说："这只是精神而非仪式"（曲解原则）
+
+## GREEN（绿灯）：写 Skill 解决问题
+
+1. 针对观察到的**具体错误**编写 Skill
+2. 针对观察到的**合理化借口**增加"红旗"清单
+3. 再次运行相同场景，Agent 应该通过
+
+## REFACTOR（重构）：优化 Skill
+
+1. 简化语言
+2. 增加示例
+3. 补充边界情况
+
+## 关键规则
+
+❌ 不要为"假设的问题"写 Skill
+✅ 只为"观察到的问题"写 Skill
+
+❌ 不要写"完美的通用指南"
+✅ 写"解决具体问题的最小化规则"
+```
+
+**具体示例**：
+
+**RED（观察失败）**：
+```
+场景：要求 Agent 实现用户注册功能，遵循 TDD
+
+Agent 行为（没有 TDD Skill）：
+1. 直接写了 UserService.register() 方法
+2. 写了业务逻辑
+3. 最后补了一个测试
+4. 说："测试已经覆盖了，应该没问题"
+
+问题：违反了 TDD 的"先写测试"原则
+```
+
+**GREEN（写 Skill）**：
+```markdown
+# skills/test-driven-development/SKILL.md
+
+## 红旗清单 - 发现这些立即停止
+- ❌ 在写测试前写了任何实现代码
+- ❌ "我已经手动测试过了"
+- ❌ "测试和代码一起写效果一样"
+- ❌ "这只是精神而非仪式"
+- ❌ "这次情况特殊因为..."
+
+**所有这些都意味着：删除代码，从测试开始重新来**
+
+## 强制流程
+
+1. 写一个**失败的测试**
+2. 运行测试，确认它**真的失败了**
+3. 写**最少的代码**让测试通过
+4. 运行测试，确认通过
+5. 重构（如果需要）
+6. 重复
+```
+
+**验证（再次测试）**：
+```
+场景：同样要求实现用户注册，但加载 TDD Skill
+
+Agent 行为（有 TDD Skill）：
+1. 写测试：test_user_registration_success()
+2. 运行测试，确认失败（因为还没实现）
+3. 写最小实现
+4. 运行测试，通过
+5. 继续下一个测试
+
+结果：✅ 符合 TDD 流程
+```
+
+#### 我们当前的问题
+- Skills 是"一次性编写"，没有经过实际验证
+- 不知道 AI 在没有 Skill 时会犯什么错
+- 可能包含了无用的内容（假设的问题）
+
+#### 借鉴方案
+
+**建立 Skill 开发流程**：
+
+`docs/process/skill-development-workflow.md`：
+```markdown
+# Skill 开发工作流（TDD 方法）
+
+## 原则
+
+**If you didn't watch Claude fail without the skill, 
+you don't know if the skill teaches the right thing.**
+
+## 流程
+
+### Step 1：RED - 观察失败（必须！）
+
+#### 1.1 准备测试场景
+选择一个具体的、真实的开发任务：
+- ✅ 好：实现订单创建接口
+- ❌ 坏：学习架构设计（太抽象）
+
+#### 1.2 在没有 Skill 的情况下让 Claude 执行
+```
+# 临时移除相关 Skill
+mv .cursor/skills/architecture/architecture-baseline.md \
+   .cursor/skills/architecture/architecture-baseline.md.disabled
+
+# 打开 Cursor，给 Claude 任务
+"请帮我实现一个订单创建接口，包含 Controller 和 Service"
+
+# 观察 Claude 的行为
+```
+
+#### 1.3 记录具体问题
+创建文档：`skills/_drafts/architecture-baseline-observations.md`
+
+```markdown
+# 观察记录：架构基线 Skill 开发
+
+## 测试日期
+2024-02-15
+
+## 测试场景
+要求 Claude 实现订单创建接口
+
+## 观察到的问题
+
+### 问题1：违反分层规范
+**Claude 的代码**：
+```java
+@RestController
+public class OrderController {
+    @Autowired
+    private OrderMapper orderMapper; // ❌ Controller 直接依赖 Mapper
+    
+    @PostMapping("/orders")
+    public Result createOrder(@RequestBody OrderRequest request) {
+        OrderPO orderPO = new OrderPO();
+        orderMapper.insert(orderPO); // ❌ 跨层调用
+        return Result.success();
+    }
+}
+```
+
+**Claude 的合理化借口**：
+"这是个简单的 CRUD，不需要复杂的分层"
+
+### 问题2：贫血模型
+**Claude 的代码**：
+```java
+public class Order {
+    private Long id;
+    private BigDecimal amount;
+    // 只有 getter/setter
+}
+```
+
+**Claude 的合理化借口**：
+"这样更简单，业务逻辑在 Service 层统一管理"
+
+### 问题3：缺少领域规则校验
+**Claude 的代码**：
+```java
+public class OrderService {
+    public void createOrder(Order order) {
+        orderMapper.insert(order); // ❌ 没有校验
+    }
+}
+```
+
+**Claude 的合理化借口**：
+"前端会做校验的"
+
+## 总结
+
+Claude 在没有 Skill 指导下，倾向于：
+1. 为了"简单"违反分层规范
+2. 写贫血模型
+3. 跳过领域规则校验
+4. 用"简单"、"前端处理"等借口合理化
+```
+
+### Step 2：GREEN - 编写 Skill
+
+基于观察到的**具体问题**，编写 Skill：
+
+`.cursor/skills/architecture/architecture-baseline.md`：
+```markdown
+---
+name: architecture-baseline
+description: "..."
+---
+
+# 架构基线 Skill
+
+## 红旗清单 - 发现这些立即停止
+
+### ❌ 红旗1：Controller 直接依赖 Mapper/Repository
+**症状**：
+```java
+@RestController
+public class OrderController {
+    @Autowired
+    private OrderMapper orderMapper; // ❌ 这是红旗！
+}
+```
+
+**合理化借口**：
+- "这是个简单的 CRUD，不需要复杂分层"
+- "这样更直接"
+- "减少不必要的抽象"
+
+**所有这些都意味着：违反架构规范，必须修改**
+
+**正确做法**：
+```java
+@RestController
+public class OrderController {
+    @Autowired
+    private OrderApplicationService orderApplicationService; // ✅ 调用 Application 层
+}
+```
+
+### ❌ 红旗2：贫血模型（实体只有 getter/setter）
+**症状**：
+```java
+public class Order {
+    private Long id;
+    // 只有 getter/setter，无业务方法
+}
+```
+
+**合理化借口**：
+- "这样更简单"
+- "业务逻辑在 Service 层统一管理"
+- "避免代码分散"
+
+**所有这些都意味着：违反 DDD 原则，必须修改**
+
+**正确做法**：
+```java
+public class Order {
+    private OrderId id;
+    
+    // 业务方法
+    public void confirm() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new DomainException("只有待支付订单可以确认");
+        }
+        this.status = OrderStatus.CONFIRMED;
+    }
+}
+```
+
+### ❌ 红旗3：跳过领域规则校验
+**症状**：
+```java
+public void createOrder(Order order) {
+    orderMapper.insert(order); // ❌ 没有校验
+}
+```
+
+**合理化借口**：
+- "前端会做校验的"
+- "数据库有约束"
+- "这不重要"
+
+**所有这些都意味着：后端必须校验，必须修改**
+
+## 核心规约
+（基于观察到的问题设计）
+...
+```
+
+### Step 3：验证 Skill
+
+#### 3.1 启用 Skill
+```bash
+# 恢复 Skill
+mv .cursor/skills/architecture/architecture-baseline.md.disabled \
+   .cursor/skills/architecture/architecture-baseline.md
+```
+
+#### 3.2 重新测试
+给 Claude 同样的任务，观察行为是否改变
+
+#### 3.3 记录结果
+```markdown
+# 验证记录
+
+## 测试日期
+2024-02-16
+
+## 测试场景
+同样：实现订单创建接口
+
+## Claude 行为（有 Skill）
+
+1. 宣布："我正在使用 architecture-baseline 来确保代码符合 DDD 分层"
+2. 生成代码：
+   - ✅ Controller 调用 ApplicationService
+   - ✅ Order 有业务方法（充血模型）
+   - ✅ 包含领域规则校验
+3. 没有合理化借口
+
+## 结论
+✅ Skill 有效，解决了观察到的问题
+```
+
+### Step 4：REFACTOR - 优化 Skill
+
+#### 4.1 简化语言
+去掉冗余描述，保留关键信息
+
+#### 4.2 补充示例
+增加完整的代码示例
+
+#### 4.3 增加边界情况
+如果发现新的问题，补充到"红旗清单"
+
+## 关键规则
+
+### ✅ DO（应该做）
+- 先观察 Claude 失败，再写 Skill
+- 记录 Claude 的合理化借口
+- 针对具体问题写 Skill
+- 验证 Skill 确实解决了问题
+
+### ❌ DON'T（不应该做）
+- 为假设的问题写 Skill
+- 写"完美的通用指南"
+- 跳过观察步骤
+- 一次性写完所有内容
+
+## 示例：Skill 迭代过程
+
+### 版本1（基于第一次观察）
+```markdown
+## 核心规约
+- 必须使用 DDD 分层
+- 禁止跨层调用
+```
+
+### 版本2（发现新问题）
+Claude 新的合理化借口："这只是个简单的查询接口，不需要完整分层"
+
+补充红旗：
+```markdown
+## 红旗清单
+- ❌ "这只是个简单的查询"
+- ❌ "读操作不需要完整分层"
+```
+
+### 版本3（持续优化）
+增加完整示例，简化语言
+
+## 工具支持
+
+### 自动化测试脚本
+`scripts/test-skill.sh`：
+```bash
+#!/bin/bash
+SKILL_NAME=$1
+
+# 1. 禁用 Skill
+mv .cursor/skills/$SKILL_NAME.md .cursor/skills/$SKILL_NAME.md.disabled
+
+# 2. 测试场景
+echo "请在 Cursor 中执行测试任务，观察 Claude 行为"
+read -p "按回车继续..."
+
+# 3. 启用 Skill
+mv .cursor/skills/$SKILL_NAME.md.disabled .cursor/skills/$SKILL_NAME.md
+
+# 4. 重新测试
+echo "请在 Cursor 中再次执行相同任务，对比行为"
+read -p "按回车继续..."
+
+echo "测试完成，请记录结果"
+```
+```
+
+---
+
+### 创新3：系统化调试流程 ⭐⭐⭐⭐
+
+#### Superpowers 的做法
+
+**systematic-debugging Skill**：4 阶段根因分析
+1. **root-cause-tracing**：追踪根本原因
+2. **defense-in-depth**：多层防御
+3. **condition-based-waiting**：基于条件的等待技术
+4. **verification-before-completion**：完成前验证
+
+**关键理念**：
+- 不要急于修复，先理解根因
+- 修复要有多层防御
+- 验证修复是否真正有效
+
+#### 我们可以借鉴
+
+在 `.cursor/skills/core/` 下创建：
+
+`systematic-debugging.md`：
+```markdown
+---
+name: systematic-debugging
+description: "系统化调试流程，用于排查和修复 Bug。在遇到 Bug、故障、异常行为时必须使用。"
+version: 1.0.0
+category: core
+priority: high
+---
+
+# 系统化调试 Skill
+
+## 触发条件
+- 用户报告 Bug
+- 测试失败
+- 线上故障
+- 异常行为
+
+## 4 阶段流程
+
+### 阶段1：根因追踪（Root Cause Tracing）
+
+**目标**：找到真正的根本原因，而不是表面现象
+
+**步骤**：
+1. **收集症状**
+   - 错误信息
+   - 复现步骤
+   - 日志
+   - 监控数据
+
+2. **5-Why 分析**
+   ```
+   现象：订单创建失败
+   Why1：为什么失败？→ Redis 连接超时
+   Why2：为什么超时？→ 连接池耗尽
+   Why3：为什么耗尽？→ 连接未关闭
+   Why4：为什么未关闭？→ 没用 try-with-resources
+   Why5：为什么不用？→ 开发者不知道这个最佳实践
+   
+   根因：编码规范 Skill 缺少资源管理检查项
+   ```
+
+3. **时间线重建**
+   ```
+   14:00 - 促销活动开始
+   14:15 - Redis 连接数上升
+   14:30 - 连接池耗尽
+   14:35 - 服务不可用
+   ```
+
+4. **假设验证**
+   - 假设：如果是连接泄漏，那么重启后应该恢复
+   - 验证：重启服务 → 确实恢复 → 假设成立
+
+### 阶段2：多层防御（Defense in Depth）
+
+**目标**：不只修复一个点，而是建立多层防护
+
+**层次**：
+1. **预防层**：从源头避免
+   - 更新 Skill 检查清单
+   - 静态代码分析规则
+
+2. **检测层**：尽早发现
+   - 监控告警（80% 就告警）
+   - 单元测试覆盖
+
+3. **缓解层**：减轻影响
+   - 连接池大小配置
+   - 超时时间设置
+
+4. **恢复层**：快速恢复
+   - 自动重启机制
+   - 降级方案
+
+**示例**：
+```markdown
+## Redis 连接泄漏的多层防御
+
+### 预防层
+- 更新 coding-standards Skill
+- 增加检查项："检测到 Jedis 必须用 try-with-resources"
+- SonarQube 规则检测
+
+### 检测层
+- Prometheus 监控：redis_pool_active / redis_pool_max > 0.8 告警
+- 单元测试：验证连接正确关闭
+
+### 缓解层
+- 连接池大小：从 100 增加到 200（临时）
+- 连接超时：30s（避免长时间占用）
+
+### 恢复层
+- K8s liveness probe：连接池 > 95% 自动重启
+- 降级方案：缓存失败时直接查数据库
+```
+
+### 阶段3：修复验证（Verification Before Completion）
+
+**目标**：确保修复真正有效
+
+**步骤**：
+1. **修复代码**
+   ```java
+   // 修复前
+   Jedis jedis = new Jedis("localhost", 6379);
+   String value = jedis.get("key");
+   // 忘记关闭
+   
+   // 修复后
+   try (Jedis jedis = new Jedis("localhost", 6379)) {
+       String value = jedis.get("key");
+   } // 自动关闭
+   ```
+
+2. **单元测试**
+   ```java
+   @Test
+   public void testRedisConnectionClosed() {
+       // 验证连接被正确关闭
+       RedisConnectionPool pool = mock(RedisConnectionPool.class);
+       orderService.getOrderStatus("123");
+       verify(pool).returnConnection(any());
+   }
+   ```
+
+3. **集成测试**
+   - 模拟高并发场景
+   - 验证连接池不会耗尽
+
+4. **灰度发布**
+   - 先发布到 10% 流量
+   - 监控 24 小时
+   - 确认无问题后全量
+
+5. **监控验证**
+   - 观察 Redis 连接数趋势
+   - 确认告警不再触发
+
+### 阶段4：经验沉淀（Memory Update）
+
+**目标**：将教训转化为预防机制
+
+**步骤**：
+1. **记录故障案例**
+   ```bash
+   bash scripts/create-incident.sh redis-pool-exhaustion
+   ```
+
+2. **更新 Skill**
+   在 `.cursor/skills/core/coding-standards.md` 增加：
+   ```markdown
+   ## 检查清单
+   - [ ] 检测到 Jedis/Connection/InputStream 等 AutoCloseable 对象
+         必须使用 try-with-resources
+         （来源：memory/incidents/2024-01-redis-pool-exhaustion.md）
+   ```
+
+3. **团队分享**
+   - 技术分享会：Java 资源管理最佳实践
+   - 更新新人培训材料
+
+## 调试反模式（禁止！）
+
+### ❌ 反模式1：急于修复
+**错误**：看到错误立即改代码，不理解根因
+
+**正确**：先完成阶段1（根因追踪）
+
+### ❌ 反模式2：单点修复
+**错误**：只修复一个地方，没有多层防御
+
+**正确**：建立预防、检测、缓解、恢复 4 层防护
+
+### ❌ 反模式3：修复未验证
+**错误**："应该修好了"，没有测试验证
+
+**正确**：单元测试 + 集成测试 + 灰度发布
+
+### ❌ 反模式4：经验流失
+**错误**：修复完就结束，没有沉淀经验
+
+**正确**：更新 memory/ 和 Skill
+
+## 示例对话
+
+### ✅ 正确的调试流程
+
+**用户**："线上订单服务报错了，用户无法下单"
+
+**AI**：
+```
+我正在使用 systematic-debugging 来系统化地排查这个问题。
+
+【阶段1：根因追踪】
+
+让我先收集信息：
+1. 错误信息是什么？
+2. 何时开始出现的？
+3. 影响范围是全部用户还是部分用户？
+4. 日志中有什么线索？
+
+（用户提供信息后）
+
+我进行 5-Why 分析：
+- Why1：为什么下单失败？→ Redis 连接超时
+- Why2：为什么超时？→ 连接池耗尽
+...
+
+根本原因：代码中 Jedis 连接未正确关闭
+
+【阶段2：多层防御】
+
+我建议建立 4 层防护：
+1. 预防：更新 coding-standards Skill
+2. 检测：增加监控告警
+3. 缓解：调整连接池配置
+4. 恢复：自动重启机制
+
+【阶段3：修复验证】
+
+1. 修复代码（使用 try-with-resources）
+2. 单元测试验证
+3. 灰度发布 10% 流量
+4. 监控 24 小时
+
+【阶段4：经验沉淀】
+
+我会：
+1. 记录故障案例到 memory/
+2. 更新 coding-standards Skill
+3. 建议团队技术分享
+```
+
+### ❌ 错误的调试流程
+
+**用户**："线上订单服务报错了"
+
+**AI**：
+```
+"我看了下，应该是 Redis 连接的问题，
+我帮你改成这样：
+
+try (Jedis jedis = ...) {
+    ...
+}
+
+应该修好了！"
+```
+
+**问题**：
+- 没有理解根因
+- 没有多层防御
+- 没有验证修复
+- 没有经验沉淀
+```
+
+---
+
+### 创新4：Subagent 驱动开发 ⭐⭐⭐⭐
+
+#### Superpowers 的做法
+
+**核心理念**：
+- 主 Agent 制定计划
+- Subagent 执行具体任务
+- 两阶段审查：规范符合性 → 代码质量
+
+#### 我们可以借鉴
+
+虽然 Cursor 不原生支持 subagent，但我们可以模拟这个流程：
+
+`.cursor/skills/collaboration/task-execution.md`：
+```markdown
+---
+name: task-execution
+description: "任务执行流程，模拟 subagent 驱动开发模式"
+---
+
+# 任务执行 Skill
+
+## 流程
+
+### Step 1：任务分解
+将大任务拆分为独立的小任务
+
+示例：
+```
+大任务：实现订单服务
+    ↓
+小任务：
+1. 创建 Order 实体（Domain 层）
+2. 创建 OrderRepository 接口
+3. 实现 OrderRepositoryImpl
+4. 创建 OrderApplicationService
+5. 创建 OrderController
+```
+
+### Step 2：逐任务执行（模拟 subagent）
+每个任务当作独立的"子会话"：
+
+```
+[子任务 1：创建 Order 实体]
+
+1. 加载相关 Skills
+   - architecture-baseline
+   - coding-standards
+   
+2. 实现代码
+
+3. 自检：
+   - [ ] 符合 DDD 规范？
+   - [ ] 有业务方法？
+   - [ ] 有校验逻辑？
+   
+4. 标记完成：✅ 子任务 1 完成
+```
+
+### Step 3：两阶段审查
+
+#### 审查1：规范符合性
+- 是否符合 architecture-baseline？
+- 是否符合 coding-standards？
+- 是否符合 security-baseline？
+
+#### 审查2：代码质量
+- 命名是否清晰？
+- 逻辑是否合理？
+- 有没有冗余代码？
+
+### Step 4：汇总报告
+所有子任务完成后，生成汇总：
+
+```
+## 订单服务实现完成
+
+✅ 已完成任务：
+1. Order 实体（Domain 层）- 符合 DDD
+2. OrderRepository 接口 - 符合分层
+3. OrderRepositoryImpl - 符合规范
+4. OrderApplicationService - 业务编排正确
+5. OrderController - 接口清晰
+
+⚠️ 需要注意：
+- 缺少单元测试（建议补充）
+- 监控埋点未添加（建议增加）
+
+📊 代码统计：
+- 新增文件：5 个
+- 新增代码：320 行
+- 符合规范：100%
+```
+```
+
+---
+
+### 创新5：Skill 编写指南本身也是 Skill ⭐⭐⭐⭐
+
+#### Superpowers 的亮点
+
+`skills/writing-skills/SKILL.md`：这是一个教 AI 如何编写 Skill 的 Skill
+
+**核心价值**：
+- 自举（Self-bootstrapping）
+- AI 可以帮助人类编写更好的 Skills
+- Skills 体系可以自我进化
+
+#### 我们可以借鉴
+
+`.cursor/skills/core/skill-development.md`：
+```markdown
+---
+name: skill-development
+description: "教 AI 如何帮助人类开发高质量的 Skills"
+---
+
+# Skill 开发指南（元 Skill）
+
+## 当用户说"帮我写一个 XXX Skill"时使用
+
+## 核心原则
+
+1. **TDD 驱动**：先观察失败，再写 Skill
+2. **最小化**：只解决观察到的问题
+3. **可测试**：写完必须验证
+
+## 辅助用户的流程
+
+### Step 1：帮助设计测试场景
+```
+"在写 Skill 之前，我们需要先观察 AI 在没有 Skill 时会犯什么错。
+
+你想解决什么问题？我们来设计一个测试场景：
+- 具体任务是什么？（如：实现用户注册）
+- 期望 AI 怎么做？（如：遵循 TDD，先写测试）
+- 担心 AI 会怎么做错？（如：直接写实现，后补测试）"
+```
+
+### Step 2：指导观察过程
+```
+"现在让我们观察 AI 在没有 Skill 时的行为：
+
+1. 请临时移除相关 Skill
+2. 给 AI 同样的任务
+3. 记录 AI 的具体错误行为
+4. 记录 AI 的合理化借口
+
+我可以帮你生成一个观察记录模板..."
+```
+
+### Step 3：协助编写 Skill
+```
+"基于你观察到的问题，我建议 Skill 包含：
+
+1. 红旗清单（针对观察到的错误）
+   - ❌ [具体错误行为]
+   - ❌ [合理化借口]
+
+2. 强制流程（正确做法）
+   - Step 1: ...
+   - Step 2: ...
+
+3. 示例代码（正确 vs 错误对比）
+
+需要我帮你起草 Skill 内容吗？"
+```
+
+### Step 4：帮助验证 Skill
+```
+"Skill 写好了，现在我们来验证它是否有效：
+
+1. 启用 Skill
+2. 重新测试相同场景
+3. 对比 AI 行为是否改变
+
+如果 AI 仍然犯错或找到新的合理化借口，我们需要更新 Skill。"
+```
+
+## 示例对话
+
+**用户**："帮我写一个 TDD Skill，确保 AI 先写测试再写代码"
+
+**AI（使用 skill-development Skill）**：
+```
+"好的，在写 Skill 之前，我们先设计一个测试场景来观察 AI 的行为。
+
+【设计测试场景】
+任务：实现用户注册功能（POST /api/users/register）
+期望：AI 应该先写测试，再写实现
+担心：AI 可能直接写实现，测试后补
+
+【建议的观察步骤】
+1. 临时禁用任何现有的 TDD 相关 Skill
+2. 给 AI 任务："请实现用户注册功能"
+3. 观察 AI 是否：
+   - 直接写了 UserService.register() 方法？
+   - 说了什么合理化借口？（如"测试稍后补"）
+4. 记录具体行为
+
+你完成观察后，把结果告诉我，我帮你编写针对性的 Skill。"
+```
+
+（用户提供观察结果后）
+
+```
+"好的，根据你的观察，AI 在没有 Skill 时：
+1. 直接写了实现代码
+2. 说："我会在最后补测试"
+3. 说："手动测试过了应该没问题"
+
+我建议 Skill 包含以下内容：
+
+【红旗清单】
+❌ 在写测试前写了任何实现代码
+❌ "测试稍后补"
+❌ "我手动测试过了"
+❌ "测试和代码一起写效果一样"
+
+所有这些都意味着：删除代码，从测试开始重新来
+
+【强制流程】
+1. 写一个失败的测试
+2. 运行测试，确认失败
+3. 写最少的代码让测试通过
+4. 运行测试，确认通过
+5. 重构
+6. 重复
+
+需要我帮你生成完整的 Skill 文件吗？"
+```
+```
+
+---
+
+## 📋 借鉴实施计划
+
+### 立即可执行（本周）⚡
+
+#### Day 1-2：引入强制工作流
+**行动**：
+- [ ] 创建 `.cursor/skills/core/using-skills.md`
+- [ ] 在每个现有 Skill 开头增加触发条件说明
+- [ ] 测试：给 Claude 一个任务，看它是否宣布使用的 Skills
+
+**预期效果**：
+- AI 不再跳过 Skills 检查
+- 生成代码符合规范的比例 > 90%
+
+#### Day 3-4：建立 TDD 驱动的 Skill 开发流程
+**行动**：
+- [ ] 创建 `docs/process/skill-development-workflow.md`
+- [ ] 选择 1 个现有 Skill，用 TDD 方法重写
+- [ ] 记录观察结果（AI 在没有 Skill 时的错误）
+
+**预期效果**：
+- Skill 更精准（只解决实际问题）
+- Skill 更有效（经过验证）
+
+#### Day 5：引入系统化调试流程
+**行动**：
+- [ ] 创建 `.cursor/skills/core/systematic-debugging.md`
+- [ ] 用它分析一个历史故障
+
+**预期效果**：
+- 调试流程标准化
+- 故障复盘质量提升
+
+### 短期目标（2 周内）📈
+
+#### Week 2：全面改造现有 Skills
+**行动**：
+- [ ] 用 TDD 方法重写 3-5 个核心 Skill
+- [ ] 每个 Skill 增加"红旗清单"
+- [ ] 验证改造后的效果
+
+**预期效果**：
+- Skills 准确性提升 50%
+- AI 违规率降低 80%
+
+### 中期目标（1 个月）🎯
+
+#### Week 3-4：建立 Skill 生态
+**行动**：
+- [ ] 创建 skill-development 元 Skill
+- [ ] 培训团队用 TDD 方法开发 Skill
+- [ ] 建立 Skill 测试自动化
+
+**预期效果**：
+- 团队可以自主开发高质量 Skill
+- Skill 体系可持续进化
+
+---
+
+## 🎁 核心借鉴要点总结
+
+### 1. 强制工作流 > 参考指南
+**关键变化**：
+- 从："Skill 是最佳实践参考"
+- 到："Skill 是强制执行的工作流"
+
+**实现**：
+- 创建 using-skills 元 Skill
+- 要求 AI 在任何响应前检查 Skills
+- 即使 1% 可能性也要加载
+
+### 2. TDD 驱动 Skill 开发 > 一次性编写
+**关键变化**：
+- 从："基于经验编写 Skill"
+- 到："先观察失败，再写 Skill"
+
+**实现**：
+- RED：观察 AI 在没有 Skill 时的错误
+- GREEN：写 Skill 解决具体问题
+- REFACTOR：优化和补充
+
+### 3. 红旗清单 > 抽象原则
+**关键变化**：
+- 从："遵循 SOLID 原则"（太抽象）
+- 到："❌ 检测到 Controller 调用 Mapper（具体行为）"
+
+**实现**：
+- 记录 AI 的合理化借口
+- 转化为红旗清单
+- 明确告诉 AI"发现这些立即停止"
+
+### 4. 系统化流程 > 临时经验
+**关键变化**：
+- 从："根据经验调试"
+- 到："4 阶段标准化流程"
+
+**实现**：
+- 根因追踪（5-Why）
+- 多层防御（4 层防护）
+- 修复验证（测试 + 灰度）
+- 经验沉淀（更新 Memory 和 Skill）
+
+### 5. 自举系统 > 静态文档
+**关键变化**：
+- 从："人类手工编写 Skill"
+- 到："AI 帮助人类编写 Skill"
+
+**实现**：
+- 创建 skill-development 元 Skill
+- AI 指导人类设计测试场景
+- AI 协助编写和验证 Skill
+
+---
+
+## 💡 最终建议
+
+**优先级排序**：
+
+1. **立即执行**：强制工作流（using-skills.md）⭐⭐⭐⭐⭐
+   - 投入：1 天
+   - 产出：AI 不再跳过 Skills
+   - ROI：极高
+
+2. **本周完成**：TDD 驱动 Skill 开发 ⭐⭐⭐⭐⭐
+   - 投入：2-3 天
+   - 产出：Skill 质量大幅提升
+   - ROI：很高
+
+3. **下周执行**：系统化调试流程 ⭐⭐⭐⭐
+   - 投入：1 天
+   - 产出：调试标准化
+   - ROI：高
+
+4. **月内完成**：Skill 生态建设 ⭐⭐⭐
+   - 投入：1 周
+   - 产出：自我进化能力
+   - ROI：中高
+
+---
+
+你希望我先帮你产出哪一个？我建议从 **using-skills.md（强制工作流）** 开始，因为这是基础，会立即改变 AI 的行为模式。

@@ -11,6 +11,8 @@ const KEYS = {
   inspections: STORAGE_PREFIX + 'inspections',
   traceCodes: STORAGE_PREFIX + 'trace_codes',
   circulationMock: STORAGE_PREFIX + 'circulation_mock',
+  /** 用户操作记录（PRD 合规与安全：操作与上链日志可审计） */
+  operationLogs: STORAGE_PREFIX + 'operation_logs',
 };
 
 function load(key, defaultValue = []) {
@@ -91,6 +93,29 @@ const store = {
 
   getCirculationMock: () => load(KEYS.circulationMock),
   setCirculationMock: (list) => save(KEYS.circulationMock, list),
+
+  getOperationLogs: () => load(KEYS.operationLogs),
+  setOperationLogs: (list) => save(KEYS.operationLogs, list),
+
+  /**
+   * 追加一条用户操作记录（PRD：操作与上链日志可审计）
+   * @param {string} role - 角色/入口：gov | enterprise | consumer
+   * @param {string} actionType - 操作类型：add_subject | add_farming | add_processing | add_inspection | add_trace | query_trace
+   * @param {string} summary - 简要描述（如批次号、溯源码）
+   * @param {string} [detail] - 可选详情
+   */
+  appendOperationLog(role, actionType, summary, detail) {
+    const list = load(KEYS.operationLogs);
+    list.push({
+      id: nextId('log'),
+      time: new Date().toISOString(),
+      role,
+      actionType,
+      summary: summary || '',
+      detail: detail || '',
+    });
+    save(KEYS.operationLogs, list);
+  },
 
   /** 解析数量字符串；与 PRD v0.4 上下游数量约束对齐 */
   parseQuantityStr,

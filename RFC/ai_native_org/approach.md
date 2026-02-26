@@ -26,8 +26,8 @@
 
 ### 第 0 层：工程基座（已有基础）
 
-- **内容**：基线仓 + Skills + memory 约定 + 采纳指南 + 企业级检查清单（Java / Python / TS）+ sync-skills、release-notes、decisions-summary、doc-reflector 等。
-- **作用**：单项目内「原则可执行、决策可追溯、任务可沉淀、发布可说明」，且 **格式统一**，为后续「多项目聚合」打基础。
+- **内容**：基线仓 + Skills + memory 约定 + 采纳指南 + 企业级检查清单（Java / Python / TS）+ sync-skills、release-notes、decisions-summary、doc-reflector 等；**using-skills**（元 Skill，每次响应前检查并加载相关 Skill）、**systematic-debugging**（Bug/故障系统化调试，四阶段 + memory/ 沉淀）、核心 Skill 的**红旗清单**（触达即停、交人决策）、**skill-learner-developer** 的 TDD 工作流（核心 Skill 开发/优化用 RED–GREEN–REFACTOR）。
+- **作用**：单项目内「原则可执行、决策可追溯、任务可沉淀、发布可说明」，且 **格式统一**，为后续「多项目聚合」打基础；AI 执行任一 Stage 时须加载对应 Skill，触达红旗须交人决策。
 - **组织意义**：组织 AI-native 的 **契约层** —— 所有上层能力（Hub、角色 Copilot、会议落盘）都假定项目遵守这套约定；没有这一层，上层难以成立。
 
 **建议**：持续做两件事——**约定稳定**（memory/、docs 结构不随意变）、**可验收**（用「AI-native 就绪度」清单判断项目是否达标）。若建设 Org Hub，就绪度即「哪些项目有资格被索引」的准入门槛。

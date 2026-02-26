@@ -112,6 +112,7 @@
       html += '<a href="#/gov/inspection" class="nav-link">检测报告</a>';
       html += '<a href="#/gov/trace-code" class="nav-link">溯源码</a>';
       html += '<a href="#/gov/dashboard" class="nav-link">监管报表</a>';
+      html += '<a href="#/gov/operation-logs" class="nav-link">操作记录</a>';
     } else if (isEnterprise) {
       STEPS.forEach((s, i) => {
         html += `<a href="#/enterprise/step/${i + 1}" class="nav-link">${s.title}</a>`;
@@ -160,8 +161,6 @@
   /* ---------- 政府监管：各子页复用原有逻辑，仅包一层 gov 布局 ---------- */
   function govPage(subPath) {
     renderNav('/gov');
-    const content = document.createElement('div');
-    content.className = 'gov-layout';
     main.innerHTML = '<div class="gov-layout"><div class="gov-content" id="gov-content"></div></div>';
     const contentBox = document.getElementById('gov-content');
     if (!contentBox) return;
@@ -173,10 +172,11 @@
       inspection: inspectionContent,
       'trace-code': traceCodeContent,
       dashboard: dashboardContent,
+      'operation-logs': operationLogsContent,
     };
     const fn = pages[subPath] || dashboardContent;
     contentBox.innerHTML = fn();
-    bindGovForms(subPath, contentBox);
+    bindGovForms(subPath, contentBox, undefined, 'gov');
   }
 
   function subjectsContent() {
@@ -317,6 +317,41 @@
     `;
   }
 
+  function operationLogsContent() {
+    const logs = store.getOperationLogs();
+    const roleLabel = { gov: '政府监管', enterprise: '企业登记', consumer: '消费者' };
+    const actionLabel = {
+      add_subject: '新增主体',
+      add_farming: '新增养殖/捕捞批次',
+      add_processing: '新增加工批次',
+      add_inspection: '新增检测报告',
+      add_trace: '生成溯源码',
+      query_trace: '溯源查询',
+    };
+    return `
+      <div class="page-block">
+        <h1 class="page-title">用户操作记录</h1>
+        <p class="page-desc">关键操作与上链日志可审计（PRD 合规与安全）；按时间倒序展示</p>
+        <div class="card-block">
+          <table class="table table-zebra">
+            <thead><tr><th>时间</th><th>角色</th><th>操作类型</th><th>描述</th><th>详情</th></tr></thead>
+            <tbody>
+              ${logs.length ? logs.slice().reverse().map(l => `
+                <tr>
+                  <td>${escapeHtml(new Date(l.time).toLocaleString('zh-CN'))}</td>
+                  <td>${escapeHtml(roleLabel[l.role] || l.role)}</td>
+                  <td>${escapeHtml(actionLabel[l.actionType] || l.actionType)}</td>
+                  <td>${escapeHtml(l.summary || '—')}</td>
+                  <td>${escapeHtml(l.detail || '—')}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="5" class="empty">暂无操作记录</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
   function dashboardContent() {
     const subjects = store.getSubjects();
     const farming = store.getBatchesFarming();
@@ -352,7 +387,8 @@
     `;
   }
 
-  function bindGovForms(subPath, container, refreshCallback) {
+  function bindGovForms(subPath, container, refreshCallback, role) {
+    role = role || (location.hash.indexOf('#/enterprise') === 0 ? 'enterprise' : 'gov');
     const formPanel = container.querySelector('[id^="form-"]');
     const addBtn = container.querySelector('[data-action^="add-"]');
     const cancelBtn = container.querySelector('[data-action^="cancel-"]');
@@ -386,6 +422,7 @@
           const list = store.getSubjects();
           list.push({ id: nextId('subject'), name: fd.get('name'), type: fd.get('type'), region: region, status: '已通过' });
           store.setSubjects(list);
+          store.appendOperationLog(role, 'add_subject', fd.get('name') + ' / ' + fd.get('type'), region || '');
           if (formPanel) formPanel.style.display = 'none';
           form.reset();
           if (regionOtherWrap) regionOtherWrap.style.display = 'none';
@@ -426,6 +463,7 @@
           const quantity = (fd.get('quantityNum') || '') + ' ' + (fd.get('quantityUnit') || '尾');
           list.push({ id: nextId('farm'), subjectId: fd.get('subjectId'), batchNo, mode: fd.get('mode'), variety: fd.get('variety'), quantity: quantity.trim(), date: fd.get('date'), waterArea });
           store.setBatchesFarming(list);
+          store.appendOperationLog(role, 'add_farming', batchNo + ' ' + fd.get('variety') + ' ' + quantity.trim(), fd.get('waterArea') || '');
           if (formPanel) formPanel.style.display = 'none';
           form.reset();
           if (waterAreaOther) waterAreaOther.style.display = 'none';
@@ -465,8 +503,10 @@
               alert('预警：本批消耗（' + consumedUpstreamQty + '）超过该上游批次剩余可用数量（' + cons.remainingStr + '）。Demo 仍允许保存，正式环境可配置为阻断提交。');
             }
           }
-          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: nextBatchNo('JG'), upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', consumedUpstreamQty: consumedUpstreamQty || undefined, pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: outputQty.trim() });
+          const procBatchNo = nextBatchNo('JG');
+          list.push({ id: nextId('proc'), subjectId: fd.get('subjectId'), batchNo: procBatchNo, upstreamBatchId: fd.get('upstreamBatchId') || null, upstreamBatchNo: upstream ? upstream.batchNo : '', consumedUpstreamQty: consumedUpstreamQty || undefined, pathType: fd.get('pathType'), processType: fd.get('processType') || '', date: fd.get('date'), outputQty: outputQty.trim() });
           store.setBatchesProcessing(list);
+          store.appendOperationLog(role, 'add_processing', procBatchNo + ' ' + outputQty.trim(), upstream ? upstream.batchNo : '');
           if (formPanel) formPanel.style.display = 'none';
           refresh();
         });
@@ -493,6 +533,7 @@
           const list = store.getInspections();
           list.push({ id: nextId('ins'), batchId: fd.get('batchId'), batchNo: batch ? batch.batchNo : '-', batchSource: source, type: fd.get('type'), conclusion: fd.get('conclusion'), date: fd.get('date') });
           store.setInspections(list);
+          store.appendOperationLog(role, 'add_inspection', (batch ? batch.batchNo : '-') + ' ' + fd.get('type') + ' ' + fd.get('conclusion'), fd.get('date'));
           if (formPanel) formPanel.style.display = 'none';
           refresh();
         });
@@ -518,8 +559,10 @@
           const batch = source === 'farm' ? farming.find(b => b.id === id) : processing.find(b => b.id === id);
           if (!batch) return;
           const list = store.getTraceCodes();
-          list.push({ code: nextTraceCode(), batchId: id, batchType: source, batchNo: batch.batchNo, boundAt: new Date().toLocaleString('zh-CN') });
+          const newCode = nextTraceCode();
+          list.push({ code: newCode, batchId: id, batchType: source, batchNo: batch.batchNo, boundAt: new Date().toLocaleString('zh-CN') });
           store.setTraceCodes(list);
+          store.appendOperationLog(role, 'add_trace', newCode + ' → ' + batch.batchNo, '');
           if (formPanel) formPanel.style.display = 'none';
           refresh();
         });
@@ -547,7 +590,7 @@
     if (!body) return;
 
     body.innerHTML = govPageContent(currentPath);
-    bindGovForms(currentPath, body, () => enterpriseStepPage(stepIndex + 1));
+    bindGovForms(currentPath, body, () => enterpriseStepPage(stepIndex + 1), 'enterprise');
   }
 
   function govPageContent(subPath) {
@@ -762,6 +805,7 @@
         resultEl.innerHTML = '<p class="tip tip-error">未找到该溯源码，请确认后重试</p>';
         return;
       }
+      store.appendOperationLog('consumer', 'query_trace', code, binding.batchNo || '');
 
       const farming = store.getBatchesFarming();
       const processing = store.getBatchesProcessing();
@@ -826,6 +870,7 @@
     '/gov/inspection': () => govPage('inspection'),
     '/gov/trace-code': () => govPage('trace-code'),
     '/gov/dashboard': () => govPage('dashboard'),
+    '/gov/operation-logs': () => govPage('operation-logs'),
     '/gov': () => govPage('dashboard'),
     '/enterprise/step/1': () => enterpriseStepPage(1),
     '/enterprise/step/2': () => enterpriseStepPage(2),
