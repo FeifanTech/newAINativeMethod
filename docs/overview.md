@@ -25,7 +25,7 @@
 | **docs/architecture/** | 架构与数据密集型应用方法论、技术方案、ADR 等；含 **企业级检查清单**（可选，按技术栈：JAVA / PYTHON / TS，见对应 CHECKLIST.md）。 |
 | **docs/product/** | PRD、产品文档、工作量与风险分析等。 |
 | **docs/process/** | 研发流程、Code Review、AI 使用规范、Skills 指南、业务仓采纳指南等。 |
-| **.cursor/skills/** | 与上述原则对应的 Skills 集合（Agent Skills 格式），供 Cursor 等工具匹配使用。 |
+| **.cursor/skills/** | 与上述原则对应的 Skills 集合（Agent Skills 格式），供 Cursor 等工具匹配使用。含维护指南：[SKILLS_OWNERS.md](./process/SKILLS_OWNERS.md)、[SKILLS_CHANGELOG.md](./process/SKILLS_CHANGELOG.md)。 |
 | **.kiro/skills/** | 同上，通过软链接或复制 .cursor/skills/ 使用（见下方 Kiro 设置）。 |
 | **projects/** | 按方法论落地的 **Demo / 样板工程**，每个子目录一个样板项目。 |
 | **CURSOR.md** | 本仓与 AI 工具的约定：定位、允许/不允许 AI 做的事、结构速览，含 Kiro 设置说明。 |
