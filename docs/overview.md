@@ -34,13 +34,16 @@
 
 ## 三、如何在新项目中落地这套方法
 
-1. **复制或定制约定文件**：从本仓拷贝 `CURSOR.md` 到业务仓库根目录，按业务调整「允许/不允许」与结构说明。
-2. **选择并复制 Skills 子集**：从 `.cursor/skills/` 中挑选需要的技能（如 core、product、architecture 中的部分），拷贝到业务仓的 `.cursor/skills/`；业务专属技能可自行新增。
+1. **一键初始化（推荐）**：运行 `./scripts/init-repo.sh` 自动创建目录结构、同步 Skills、创建 Kiro 软链接、初始化 memory 目录。
+2. **复制或定制约定文件**：从本仓拷贝 `CURSOR.md` 到业务仓库根目录，按业务调整「允许/不允许」与结构说明。
+3. **选择并复制 Skills 子集**：从 `.cursor/skills/` 中挑选需要的技能（如 core、product、architecture 中的部分），拷贝到业务仓的 `.cursor/skills/`；业务专属技能可自行新增。
    - **Kiro 用户**：通过软链接 `ln -s .cursor/skills .kiro/skills` 或直接复制使用。
-3. **套用文档模板**：使用 `docs/product/` 下的 PRD 模板、`docs/architecture/` 下的技术方案结构，在业务仓的 docs 中生成 PRD、技术方案、工作量与风险等。
-4. **（可选）配置自动化**：参考 `docs/process/github-actions-example.md` 在业务仓配置 PR 审查等 CI；本仓为 Skills 与原则的「单一真相源」，业务仓可定期同步（拷贝 / submodule / subtree）。
+4. **套用文档模板**：使用 `docs/product/` 下的 PRD 模板、`docs/architecture/` 下的技术方案结构，在业务仓的 docs 中生成 PRD、技术方案、工作量与风险等。
+5. **（可选）配置自动化**：参考 `docs/process/github-actions-example.md` 在业务仓配置 PR 审查等 CI；本仓为 Skills 与原则的「单一真相源」，业务仓可定期同步（拷贝 / submodule / subtree）。
 
 更细的步骤见 **docs/process/adopt-this-project-in-your-repo.md**。
+
+- **快速上手**：阅读 **docs/process/QUICK_START.md** 获取一页纸快速指南。
 
 - **企业级检查清单（可选）**：若项目为 **Java/Spring**、**Python/FastAPI 或 Django**、**TypeScript/Node/Nest**，架构与编码类 Skill 会结合 **docs/architecture/** 下对应 CHECKLIST（JAVA / PYTHON / TS）逐项审查并给出结论；其他技术栈可跳过。
 

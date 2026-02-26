@@ -25,8 +25,10 @@ CURSOR.md          # 本仓与 AI 工具的约定（含 Kiro 设置）
 
 1. 阅读 **docs/overview.md** 了解「为何要、结构、如何落地」。
 2. 阅读 **CURSOR.md** 了解在本仓中 AI 工具的定位与允许范围（含 Kiro 设置）。
-3. 若要在业务仓复用：见 **docs/process/adopt-this-project-in-your-repo.md**。
-4. Kiro 用户：执行 `mkdir -p .kiro/skills && ln -s "$(pwd)/.cursor/skills" .kiro/skills` 或复制使用。
+3. 阅读 **docs/process/QUICK_START.md** 获取一页纸快速指南。
+4. 若要在业务仓复用：见 **docs/process/adopt-this-project-in-your-repo.md**。
+   - 首次使用推荐运行 `./scripts/init-repo.sh` 一键初始化。
+5. Kiro 用户：执行 `mkdir -p .kiro/skills && ln -s "$(pwd)/.cursor/skills" .kiro/skills` 或复制使用。
 
 ## 千岛湖溯源示例
 

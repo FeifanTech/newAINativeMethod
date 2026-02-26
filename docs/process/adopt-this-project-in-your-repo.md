@@ -2,9 +2,37 @@
 
 > 本仓库是 **AI-native 方法论与 Skills 的模板仓**，不是业务代码仓。本文说明如何在业务仓库中复用本仓的原则、Skills 与文档模板。
 
+> 💡 **快速上手**：首次使用建议先阅读 **QUICK_START.md** 获取一页纸快速指南，再按本文步骤落地。
+
 ---
 
 ## 一、在业务仓库中要做的事
+
+### 0. 一键初始化（推荐首次使用）
+
+首次在业务仓库采纳本方法论，建议使用初始化脚本一键搭建基础结构：
+
+```bash
+# 方式一：从基线仓克隆
+git clone https://github.com/FeifanTech/newAINativeMethod.git /tmp/ainative
+cp /tmp/ainative/scripts/init-repo.sh ./scripts/
+chmod +x scripts/init-repo.sh
+./scripts/init-repo.sh
+
+# 方式二：直接运行（需要网络访问基线仓）
+curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scripts/init-repo.sh | bash
+```
+
+初始化脚本会：
+- 同步 `docs/` 文档模板
+- 同步 `.cursor/skills/` 技能库
+- 创建 `.kiro/skills/` 软链接（Kiro 用户）
+- 创建可选的 `memory/` 目录结构
+- 复制 `CURSOR.md` 约定文件
+
+初始化完成后，可根据业务需求调整对应文件。
+
+---
 
 ### 1.1 复制或定制约定文件
 
