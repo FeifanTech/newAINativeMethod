@@ -1,11 +1,12 @@
-# Cursor 使用约定 · 本仓库
+# AI 工具使用约定 · 本仓库
 
 ## 仓库定位
 
 本仓库是 **AI-native 研发方法论与可复用技能库** 的**模板仓 / 基线仓**，不是业务线上代码仓。
 
-- **内容**：原则与规范、PRD/技术方案模板、Cursor Skills（.cursor/skills）、以及按方法论落地的**样板 Demo**（projects/）。
+- **内容**：原则与规范、PRD/技术方案模板、Agent Skills（.cursor/skills）、以及按方法论落地的**样板 Demo**（projects/）。
 - **面向**：多项目、多产品线（如 AI 外呼、千岛湖溯源等）；供业务仓库**拷贝或引用**本仓的原则、Skills 与文档模板。
+- **支持的 AI 工具**：Cursor、Kiro、Claude Code 等支持 [Agent Skills](https://agentskills.io) 标准的工具。
 
 ## 允许 / 不允许 AI 做的事
 
@@ -33,7 +34,24 @@
 - **docs/architecture/**：架构与数据密集型应用方法论、技术方案。
 - **docs/product/**：PRD、产品文档、工作量与风险等。
 - **docs/process/**：研发流程、Code Review、AI 使用规范、Skills 与落地指南。
-- **.cursor/skills/**：通用与分类 Skills（core / product / architecture），供 Cursor 匹配使用。
+- **.cursor/skills/**：通用与分类 Skills，供 Cursor 匹配使用。
+- **.kiro/skills/**：同上，通过软链接或复制 .cursor/skills/ 使用。
 - **projects/**：按方法论落地的样板工程（如 qiandao-lake-traceability-demo）。
+
+## Kiro 使用设置
+
+本仓库使用 **Agent Skills** 标准，已兼容 Kiro。设置方式：
+
+```bash
+# 方式一：软链接（推荐，保持同步更新）
+mkdir -p .kiro/skills
+ln -s "$(pwd)/.cursor/skills" .kiro/skills
+
+# 方式二：直接复制
+mkdir -p .kiro/skills
+cp -r .cursor/skills/* .kiro/skills/
+```
+
+设置完成后，打开 Kiro，在 **Agent Steering & Skills** 面板中查看已加载的 Skills。Kiro 会根据请求自动匹配对应的 Skill。
 
 更多说明见 **docs/overview.md**。

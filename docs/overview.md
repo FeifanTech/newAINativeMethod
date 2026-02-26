@@ -13,7 +13,7 @@
 用一套**可复制的原则、Skills 和流程**，把 AI 稳定嵌入日常研发：
 
 - **原则**：架构、产品、开发各有一套原则与检查清单，供人与 AI 共同遵循。
-- **Skills**：Cursor 可匹配的「技能包」（.cursor/skills），按角色与场景触发，产出规范格式的草稿与评审结论。
+- **Skills**：Agent Skills 格式的「技能包」（.cursor/skills），按角色与场景触发，产出规范格式的草稿与评审结论。支持 Cursor、Kiro、Claude Code 等主流 AI 工具。
 - **模板与 Demo**：PRD、技术方案、工作量与风险分析等模板，以及按方法论落地的样板工程（projects/），供业务仓库拷贝或参考。
 
 ---
@@ -25,9 +25,10 @@
 | **docs/architecture/** | 架构与数据密集型应用方法论、技术方案、ADR 等；含 **企业级检查清单**（可选，按技术栈：JAVA / PYTHON / TS，见对应 CHECKLIST.md）。 |
 | **docs/product/** | PRD、产品文档、工作量与风险分析等。 |
 | **docs/process/** | 研发流程、Code Review、AI 使用规范、Skills 指南、业务仓采纳指南等。 |
-| **.cursor/skills/** | 与上述原则对应的 Skills 集合（core / product / architecture），供 Cursor 匹配使用。 |
+| **.cursor/skills/** | 与上述原则对应的 Skills 集合（Agent Skills 格式），供 Cursor 等工具匹配使用。 |
+| **.kiro/skills/** | 同上，通过软链接或复制 .cursor/skills/ 使用（见下方 Kiro 设置）。 |
 | **projects/** | 按方法论落地的 **Demo / 样板工程**，每个子目录一个样板项目。 |
-| **CURSOR.md** | 本仓与 Cursor 的约定：定位、允许/不允许 AI 做的事、结构速览。 |
+| **CURSOR.md** | 本仓与 AI 工具的约定：定位、允许/不允许 AI 做的事、结构速览，含 Kiro 设置说明。 |
 
 ---
 
@@ -35,6 +36,7 @@
 
 1. **复制或定制约定文件**：从本仓拷贝 `CURSOR.md` 到业务仓库根目录，按业务调整「允许/不允许」与结构说明。
 2. **选择并复制 Skills 子集**：从 `.cursor/skills/` 中挑选需要的技能（如 core、product、architecture 中的部分），拷贝到业务仓的 `.cursor/skills/`；业务专属技能可自行新增。
+   - **Kiro 用户**：通过软链接 `ln -s .cursor/skills .kiro/skills` 或直接复制使用。
 3. **套用文档模板**：使用 `docs/product/` 下的 PRD 模板、`docs/architecture/` 下的技术方案结构，在业务仓的 docs 中生成 PRD、技术方案、工作量与风险等。
 4. **（可选）配置自动化**：参考 `docs/process/github-actions-example.md` 在业务仓配置 PR 审查等 CI；本仓为 Skills 与原则的「单一真相源」，业务仓可定期同步（拷贝 / submodule / subtree）。
 
