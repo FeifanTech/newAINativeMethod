@@ -44,6 +44,7 @@
 更细的步骤见 **docs/process/adopt-this-project-in-your-repo.md**。
 
 - **快速上手**：阅读 **docs/process/QUICK_START.md** 获取一页纸快速指南。
+- **多人协作**：阅读 **docs/process/multi-person-collaboration.md** 了解大型项目的协作模式。
 
 - **企业级检查清单（可选）**：若项目为 **Java/Spring**、**Python/FastAPI 或 Django**、**TypeScript/Node/Nest**，架构与编码类 Skill 会结合 **docs/architecture/** 下对应 CHECKLIST（JAVA / PYTHON / TS）逐项审查并给出结论；其他技术栈可跳过。
 
