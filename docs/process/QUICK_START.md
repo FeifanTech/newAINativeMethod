@@ -1,6 +1,7 @@
 # AI-native 研发快速上手指南
 
-> 这是一页纸的快速参考，帮助团队快速理解"什么时候用什么"。
+> 这是一页纸的快速参考，帮助团队快速理解「什么时候用什么」。  
+> 与 [approach.md](../../RFC/ai_native_org/approach.md)、[CURSOR.md](../../CURSOR.md) 约定一致。
 
 ---
 
@@ -10,6 +11,7 @@
 
 - AI 负责：生成草稿、执行任务、提供建议
 - 人负责：审核、决策、确认 Human Gate
+- **响应前检查**：AI 在给出实质性响应前会按 [using-skills](../../.cursor/skills/using-skills/SKILL.md) 检查并加载相关 Skill（本仓 CURSOR.md 约定）
 
 ---
 
@@ -56,10 +58,10 @@
 ## 常用命令
 
 ```bash
-# 初始化业务仓（首次使用）
+# 初始化业务仓（首次使用：需先将 scripts/init-repo.sh 从基线仓复制到业务仓 scripts/，详见 adopt-this-project-in-your-repo.md）
 ./scripts/init-repo.sh
 
-# 同步基线仓 Skills 更新
+# 同步基线仓 Skills 更新（init-repo.sh 会复制此脚本到业务仓）
 ./scripts/sync-skills.sh
 
 # 查看可用 Skills
@@ -72,10 +74,12 @@ ls -la .cursor/skills/
 
 | 文件 | 作用 |
 |------|------|
-| `CURSOR.md` | AI 工具的使用约定 |
+| `CURSOR.md` | AI 工具使用约定（含「每次响应前检查」using-skills、**Kiro 使用设置**） |
 | `docs/overview.md` | 方法论总览 |
-| `.cursor/skills/` | 技能库目录 |
-| `memory/` | 团队知识沉淀（可选） |
+| `docs/process/QUICK_START.md` | 本卡片 |
+| `.cursor/skills/` | 技能库目录（Cursor / 通用） |
+| `.kiro/skills/` | Kiro 读取的 Skills；软链接至 .cursor/skills 或复制使用，与 Cursor 共用同一套内容 |
+| `memory/` | 团队知识沉淀（可选；decisions / product / engineering / changelog） |
 
 ---
 
@@ -85,6 +89,14 @@ ls -la .cursor/skills/
 - 部署到生产环境
 - 修改数据模型/核心接口
 - 安全/合规相关的决策
+
+---
+
+## 相关文档
+
+- [adopt-this-project-in-your-repo.md](./adopt-this-project-in-your-repo.md) - 在业务仓中落地本方法论（含 init-repo 步骤）
+- [multi-person-collaboration.md](./multi-person-collaboration.md) - 多人协作与 Human Gate 分层
+- [CURSOR_SKILLS_GUIDE.md](./CURSOR_SKILLS_GUIDE.md) - Skills 与 Rules 使用指南
 
 ---
 

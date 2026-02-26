@@ -26,7 +26,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 初始化脚本会：
 - 同步 `docs/` 文档模板
 - 同步 `.cursor/skills/` 技能库
-- 创建 `.kiro/skills/` 软链接（Kiro 用户）
+- 创建 `.kiro/skills/` 软链接（指向 `.cursor/skills`，Kiro 用户可直接使用）
 - 创建可选的 `memory/` 目录结构
 - 复制 `CURSOR.md` 约定文件
 

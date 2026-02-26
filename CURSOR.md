@@ -52,6 +52,6 @@ mkdir -p .kiro/skills
 cp -r .cursor/skills/* .kiro/skills/
 ```
 
-设置完成后，打开 Kiro，在 **Agent Steering & Skills** 面板中查看已加载的 Skills。Kiro 会根据请求自动匹配对应的 Skill。
+设置完成后，打开 Kiro，在 **Agent Steering & Skills**（或等价）面板中确认已加载的 Skills。Kiro 会按 Agent Skills 标准读取 `.kiro/skills/` 下的 SKILL.md，并根据请求自动匹配对应的 Skill；与 Cursor 共用同一套 Skill 内容，仅目录约定不同（.cursor/skills vs .kiro/skills）。
 
 更多说明见 **docs/overview.md**。

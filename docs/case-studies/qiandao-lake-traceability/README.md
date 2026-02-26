@@ -6,6 +6,18 @@
 
 ---
 
+## 与项目设计原则的对齐
+
+本案例遵循 [approach.md](../../../RFC/ai_native_org/approach.md) 与 [RFC-ai-dlc-implementation.md](../../../RFC/ai-dlc/RFC-ai-dlc-implementation.md) 的约定：
+
+- **契约优先**：各阶段产出与 memory/、docs 约定一致；Human Gate 明确，决策落盘到 memory/。
+- **记忆层是底座**：需求决策→product、技术决策→decisions、工程约定→engineering、变更→changelog（见 4.3 踩坑记录中的经验沉淀）。
+- **AI 建议、人确认**：PRD/技术方案/任务拆解均为 AI 草稿，经 Human Gate 评审后定稿；踩坑与决策记录到 memory/。
+- **可追溯**：案例中阶段流转、审核点、决策点均有记录；实际项目建议 Commit/PR 带任务 ID 或 Plan-ID。
+- **实现与 Demo 关系**：第 4 章任务拆解与实施描述的是「计划中的后端实现路径」；本仓实际可运行 Demo 见 [projects/qiandao-lake-traceability-demo](../../projects/qiandao-lake-traceability-demo)（前端 Demo，localStorage），与 PRD/技术方案一致，用于验证闭环与交互。
+
+---
+
 ## 案例概述
 
 | 项目 | 内容 |
@@ -67,11 +79,21 @@ docs/case-studies/qiandao-lake-traceability/
 
 ## 使用的 Skills
 
-- [product-design-principles](../../.cursor/skills/product-design-principles/SKILL.md)
-- [architecture-principles](../../.cursor/skills/architecture-principles/SKILL.md)
-- [implementation-plan](../../.cursor/skills/implementation-plan/SKILL.md)
-- [development-principles](../../.cursor/skills/development-principles/SKILL.md)
-- [code-standards](../../.cursor/skills/code-standards/SKILL.md)
+- [using-skills](../../../.cursor/skills/using-skills/SKILL.md) - 响应前检查并加载相关 Skill（与 CURSOR.md 约定一致）
+- [product-design-principles](../../../.cursor/skills/product-design-principles/SKILL.md)
+- [architecture-principles](../../../.cursor/skills/architecture-principles/SKILL.md)
+- [implementation-plan](../../../.cursor/skills/implementation-plan/SKILL.md)
+- [development-principles](../../../.cursor/skills/development-principles/SKILL.md)
+- [code-standards](../../../.cursor/skills/code-standards/SKILL.md)
+- [systematic-debugging](../../../.cursor/skills/systematic-debugging/SKILL.md) - 踩坑与故障排查（见 4.3、5.1）
+
+---
+
+## 相关文档
+
+- [approach.md](../../../RFC/ai_native_org/approach.md) - 组织 AI-Native 思路与原则
+- [multi-person-collaboration.md](../../process/multi-person-collaboration.md) - 多人协作规范（Human Gate 分层、memory/ 同步）
+- [projects/qiandao-lake-traceability-demo](../../../projects/qiandao-lake-traceability-demo) - 本仓可运行前端 Demo
 
 ---
 
