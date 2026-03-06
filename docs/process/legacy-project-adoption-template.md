@@ -15,11 +15,68 @@
 - **先接入口，再接流程**：优先统一角色 prompt 入口，再推动团队采用完整角色工作流。
 - **每一阶段都可独立停下**：每个阶段都应形成可见收益，不依赖后续阶段才能生效。
 
-## 阶段 0：最低成本接入
+## 阶段 0：建立架构基线快照
 
 ### 目标
 
-- 团队先使用统一的基础规范，不改动既有分工与发布流程。
+- 在不深挖全部历史的前提下，先把遗留项目当前的技术结构、边界和禁区沉淀出来。
+
+### 建议接入内容
+
+- `docs/process/legacy-architecture-baseline-template.md`
+- `memory/architecture-baseline.md`
+
+### 执行动作
+
+1. 先按 [legacy-architecture-baseline-template.md](./legacy-architecture-baseline-template.md) 产出 `memory/architecture-baseline.md`。
+2. 只记录当前仍会影响开发判断的事实，不追求补齐全部历史。
+3. 优先补齐技术栈、模块边界、核心调用链、外部依赖、允许与禁止。
+
+### 完成标准
+
+- 团队对“系统由什么组成、哪里能动、哪里不能动”形成共享基线。
+- AI 在进入遗留项目时，不再需要每次从代码里重新猜系统结构。
+
+## 阶段 1：接入最小项目记忆
+
+### 目标
+
+- 让 AI 能稳定复用团队约定和关键决策，减少跨人、跨会话漂移。
+
+### 最小 memory 结构
+
+```text
+memory/
+  architecture-baseline.md
+  decisions.md
+  engineering.md
+```
+
+### 建议内容
+
+- `memory/architecture-baseline.md`
+  - 记录技术栈、模块边界、核心调用链、外部依赖、允许与禁止。
+- `memory/decisions.md`
+  - 记录仍然有效的架构约束、外部依赖边界、不能轻易改动的技术选择。
+- `memory/engineering.md`
+  - 记录启动命令、测试命令、分支策略、目录约定、常见禁忌。
+
+### 执行动作
+
+1. 在架构基线快照基础上，由负责人补齐最近仍有效的 5 到 10 条工程约定和关键决策。
+2. 将 `architecture-baseline.md`、`decisions.md`、`engineering.md` 作为遗留项目的最小 memory 套件。
+3. 将 AI 发现的新约定或确认后的决策继续写入 `memory/`。
+
+### 完成标准
+
+- 新成员或新会话能从 `memory/` 快速恢复项目上下文。
+- 相同问题不再反复解释。
+
+## 阶段 2：统一角色入口
+
+### 目标
+
+- 让团队基于同一套项目基线、工程约定和角色顺序使用 AI，而不是各自手工拼 prompt。
 
 ### 建议接入内容
 
@@ -34,7 +91,7 @@
 ### 执行动作
 
 1. 运行 `scripts/sync-skills.sh` 或手工复制上述文件。
-2. 生成开发角色入口：`bash scripts/build-role-prompt.sh developer --no-memory`。
+2. 生成开发角色入口：`bash scripts/build-role-prompt.sh developer`。
 3. 在 Code Review、缺陷修复、常规需求开发中统一使用该入口。
 
 ### 完成标准
@@ -42,39 +99,7 @@
 - 团队至少有一类任务统一使用 `developer` 角色入口。
 - Review 结论开始按统一检查项输出，而不是自由发挥。
 
-## 阶段 1：接入最小项目记忆
-
-### 目标
-
-- 让 AI 能稳定复用团队约定和关键决策，减少跨人、跨会话漂移。
-
-### 最小 memory 结构
-
-```text
-memory/
-  decisions.md
-  engineering.md
-```
-
-### 建议内容
-
-- `memory/decisions.md`
-  - 记录仍然有效的架构约束、外部依赖边界、不能轻易改动的技术选择。
-- `memory/engineering.md`
-  - 记录启动命令、测试命令、分支策略、目录约定、常见禁忌。
-
-### 执行动作
-
-1. 先由负责人补齐最近仍有效的 5 到 10 条约定，不追求历史完整。
-2. 改用：`bash scripts/build-role-prompt.sh developer`。
-3. 将 AI 发现的新约定或确认后的决策继续写入 `memory/`。
-
-### 完成标准
-
-- 新成员或新会话能从 `memory/` 快速恢复项目上下文。
-- 相同问题不再反复解释。
-
-## 阶段 2：接入架构与需求协作
+## 阶段 3：接入架构与需求协作
 
 ### 目标
 
@@ -99,7 +124,7 @@ memory/
 - 新需求与技术方案的输出结构稳定一致。
 - 跨模块改动开始有明确决策沉淀，而不是只留在聊天记录或 PR 评论里。
 
-## 阶段 3：接入文档回写与发布汇总
+## 阶段 4：接入文档回写与发布汇总
 
 ### 目标
 
@@ -128,12 +153,12 @@ memory/
 | 项目类型 | 推荐方式 |
 |----------|----------|
 | **全新项目** | 直接采用 `roles.yaml` + 全量角色 Skills + `memory/` 四件套（product / decisions / engineering / changelog） |
-| **遗留项目** | 从 `developer` 角色和最小 `memory/` 开始，先统一 Review 和工程约定，再逐步接入产品/架构角色 |
+| **遗留项目** | 先建立 `architecture-baseline.md`，再补最小 `memory/`，再统一 `developer` 入口，最后逐步接入产品/架构角色 |
 
 ## 推荐的角色入口策略
 
 - **新项目**：默认使用正式版 [roles.yaml](../../.cursor/skills/roles.yaml)。
-- **遗留项目**：第一阶段只强制 `developer`；`architect` 和 `product-designer` 在新增需求、重构、外部接口变更时再启用。
+- **遗留项目**：先完成 `architecture-baseline.md`，再强制 `developer`；`architect` 和 `product-designer` 在新增需求、重构、外部接口变更时再启用。
 
 ## 风险提示
 
@@ -143,8 +168,8 @@ memory/
 
 ## 可直接复用的最小落地清单
 
-1. 同步 `CURSOR.md`、`using-skills`、`development-principles`、`code-standards`、`role-developer`、`roles.yaml`、`build-role-prompt.sh`。
+1. 按模板产出 `memory/architecture-baseline.md`。
 2. 新建 `memory/engineering.md` 和 `memory/decisions.md`。
-3. 团队统一使用 `bash scripts/build-role-prompt.sh developer`。
-4. 先在 PR Review、Bugfix、常规开发中使用 2 周，再决定是否接入产品和架构角色。
-
+3. 同步 `CURSOR.md`、`using-skills`、`development-principles`、`code-standards`、`role-developer`、`roles.yaml`、`build-role-prompt.sh`。
+4. 团队统一使用 `bash scripts/build-role-prompt.sh developer`。
+5. 先在 PR Review、Bugfix、常规开发中使用 2 周，再决定是否接入产品和架构角色。
