@@ -7,6 +7,7 @@
 - **原则与规范**：架构、产品、开发各有一套原则与评审检查清单。
 - **文档模板**：PRD、技术方案、工作量与风险分析等，位于 `docs/` 下按类型拆分。
 - **Agent Skills**：`.cursor/skills/` 下按类型分类，供 Cursor、Kiro、Claude Code 等主流 AI 工具匹配使用。
+- **正式角色配置**：`.cursor/skills/roles.yaml` 为可直接复制到业务仓的默认角色配置；`.cursor/skills/roles.yaml.example` 保留为最小示例。
 - **样板工程**：`projects/` 下为按方法论落地的 Demo（如千岛湖溯源 demo）。
 
 ## 结构速览
@@ -40,6 +41,8 @@ CURSOR.md          # 本仓与 AI 工具的约定（含 Kiro 设置）
 
 - **全景图与执行清单**：见 **docs/overview.md** 的「五、基线仓与业务仓协同全景」（Mermaid 图）与「六、立即执行清单」。
 - **分发**：业务仓使用 `scripts/sync-skills.sh` 从本仓同步 `.cursor/skills`。
+- **统一入口**：可使用 `scripts/build-role-prompt.sh` 按角色拼接 `using-skills`、角色 Skills、`CURSOR.md` 与 `memory/`，生成团队统一 prompt 入口，减少多人协作时的上下文漂移。
+- **遗留项目接入**：见 `docs/process/legacy-project-adoption-template.md`，按“先 Review、再 memory、后设计”的渐进方式导入。
 - **防漂移**：Skill `doc-reflector` 在代码变更后反向更新 `docs/` 下 PRD/架构文档。
 - **Ops**：Skill `k8s-deploy-guard` 在编写 K8s/Docker 配置时做资源、安全与探针检查。
 - **Release Notes 与决策汇总**：Skill `release-notes-from-commits`、`decisions-summary` 用于自动生成发布说明草稿与决策摘要；使用说明与 CI 示例见 **docs/process/release-notes-and-decisions.md**。

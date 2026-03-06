@@ -45,6 +45,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 从本仓 `.cursor/skills/` 拷贝需要的技能到业务仓的 `.cursor/skills/` 下：
   - **通用**：`architecture-principles`、`role-architect`、`product-design-principles`、`role-product-designer`、`development-principles`、`code-standards`、`role-developer`。
   - **可选**：`design-review-checklist`、`implementation-plan`、`skill-learner-developer`。
+- 角色配置优先复制正式版 `.cursor/skills/roles.yaml`；若只想看最小结构，可参考 `.cursor/skills/roles.yaml.example`。
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
 - 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。
 
@@ -56,6 +57,17 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
   2. 在业务仓根目录执行：`chmod +x scripts/sync-skills.sh && ./scripts/sync-skills.sh`。
   3. （可选）将此命令加入 CI/CD 流水线或 npm `postinstall` 钩子，在每次 build 或 install 时拉取最新技能。
 - **语义**：基线仓中的 skill 会**覆盖**本地同名目录；业务仓独有 skill（基线仓中不存在的目录）会**保留**。依赖：git（2.25+ 支持 sparse-checkout）、rsync（Mac/Linux 常见；Windows 可用 WSL 或 Git Bash）。
+
+#### 如何生成统一角色入口（使用 build-role-prompt.sh）
+
+- 在多人协作项目中，建议不要依赖每个人手工挑选 prompt 片段；改为按角色统一生成。
+- **步骤**：
+  1. 将本仓 [scripts/build-role-prompt.sh](../../scripts/build-role-prompt.sh) 复制到业务项目 `scripts/` 中。
+  2. 保留或定制 `.cursor/skills/roles.yaml`，按团队角色维护 skills 顺序；若仓库中没有该文件，脚本会回退到 `.cursor/skills/roles.yaml.example`。
+  3. 在业务仓根目录执行：`bash scripts/build-role-prompt.sh developer --output /tmp/developer-prompt.md`。
+  4. 若项目启用了 `memory/`，脚本会自动拼接 `memory/product.md`、`memory/decisions.md`、`memory/engineering.md`、`memory/tasks.md`，以及 `memory/changelog.md` 的最近 200 行。
+- **作用**：统一加载 `CURSOR.md`、`using-skills`、角色 Skills 与项目记忆，降低多人协作时的 prompt 漂移；对遗留项目尤其适合，可先只接入 `memory/engineering.md` 与 `memory/decisions.md`。
+- **遗留项目建议**：不要一次性全量导入。可直接参考 [legacy-project-adoption-template.md](./legacy-project-adoption-template.md) 按阶段接入。
 
 ### 1.3 使用文档模板
 
@@ -96,6 +108,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 | **发布** | 提交、发布说明 | 建议 commit 信息与需求/任务关联；可选 release-notes 类 skill |
 
 - **（可选）项目记忆**：在业务仓维护 `memory/` 时，可在开发与协作阶段让 AI 会话前后读/写 project state，以保持跨会话一致性；详见上文 1.6。
+- **建议**：对多人协作项目和遗留项目，`memory/` 不应只停留在“可选能力”；至少应启用 `memory/decisions.md` 与 `memory/engineering.md`，再结合 `build-role-prompt.sh` 作为统一入口，否则 AI 很难稳定复用团队约定。
 
 ---
 

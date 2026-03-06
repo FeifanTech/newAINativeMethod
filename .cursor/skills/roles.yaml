@@ -1,5 +1,6 @@
-# 角色与 Skills 的配置化串联（用于 CLI/脚本生成 prompt）
-# 使用方式：脚本按 role 选择，再按 skills 顺序读取各 SKILL.md 拼接为 system prompt
+# 正式版角色配置。
+# 优先供 scripts/build-role-prompt.sh 与业务仓复制使用；
+# 若业务仓需要极简或定制顺序，可在此文件基础上调整。
 roles:
   product-designer:
     description: "产品设计：PRD、需求评审、功能设计"
@@ -17,3 +18,4 @@ roles:
       - development-principles
       - code-standards
       - role-developer
+
