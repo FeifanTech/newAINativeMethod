@@ -31,6 +31,7 @@
 1. 先按 [legacy-architecture-baseline-template.md](./legacy-architecture-baseline-template.md) 产出 `memory/architecture-baseline.md`。
 2. 只记录当前仍会影响开发判断的事实，不追求补齐全部历史。
 3. 优先补齐技术栈、模块边界、核心调用链、外部依赖、允许与禁止。
+4. 若希望先由 AI 生成初稿，再人工补充，直接参考 [generate-legacy-architecture-baseline-with-ai.md](./generate-legacy-architecture-baseline-with-ai.md)。
 
 ### 完成标准
 

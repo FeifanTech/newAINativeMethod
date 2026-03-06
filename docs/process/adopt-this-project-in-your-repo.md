@@ -67,7 +67,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
   3. 在业务仓根目录执行：`bash scripts/build-role-prompt.sh developer --output /tmp/developer-prompt.md`。
   4. 若项目启用了 `memory/`，脚本会自动拼接 `memory/product.md`、`memory/decisions.md`、`memory/engineering.md`、`memory/tasks.md`，以及 `memory/changelog.md` 的最近 200 行。
 - **作用**：统一加载 `CURSOR.md`、`using-skills`、角色 Skills 与项目记忆，降低多人协作时的 prompt 漂移；对遗留项目尤其适合，可先只接入 `memory/engineering.md` 与 `memory/decisions.md`。
-- **遗留项目建议**：不要一次性全量导入。建议先按 [legacy-architecture-baseline-template.md](./legacy-architecture-baseline-template.md) 产出 `memory/architecture-baseline.md`，再参考 [legacy-project-adoption-template.md](./legacy-project-adoption-template.md) 按阶段接入。
+- **遗留项目建议**：不要一次性全量导入。建议先按 [legacy-architecture-baseline-template.md](./legacy-architecture-baseline-template.md) 产出 `memory/architecture-baseline.md`；若希望 AI 先出初稿，再参考 [generate-legacy-architecture-baseline-with-ai.md](./generate-legacy-architecture-baseline-with-ai.md)；随后再按 [legacy-project-adoption-template.md](./legacy-project-adoption-template.md) 分阶段接入。
 
 ### 1.3 使用文档模板
 
@@ -95,6 +95,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 若希望**跨会话保持上下文、减少 AI 失忆与幻觉**，可在业务仓库根目录增加一个 `memory/` 目录，用项目内文件做「项目级、会话级」记忆：当前任务、近期决策、工程约定等写入该目录，会话前后让 AI 先读再写（或由你按会话总结更新）。这样每次自然语言协作都能沉淀为可复用上下文，第二天/下周继续聊也不会断片。
 - 与本仓的 docs/、Skills 是**互补**的：docs 放已定稿产出（PRD、技术方案），memory 放进行中的工作记忆（product/engineering/decisions/tasks/changelog/scratchpad 等）。本仓在此仅说明该可选能力；是否采用、是否接入具备中长短期记忆能力的外部服务，由业务仓自行决定。具体文件结构与会话协议可参考本仓 [tmp/memory.md](../../tmp/memory.md) 中的方案思路。
 - 对遗留项目，建议最先补的不是完整技术方案，而是 `memory/architecture-baseline.md`。它记录当前技术栈、模块边界、核心调用链、外部依赖、允许与禁止，能明显降低 AI 接入成本。
+- 若希望降低人工首轮整理成本，可先运行 `scripts/collect-architecture-baseline-input.sh` 收集结构事实，再让 AI 按模板生成 `memory/architecture-baseline.md` 初稿。
 
 ---
 
