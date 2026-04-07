@@ -29,8 +29,16 @@ mkdir -p "$TARGET_DIR"
 echo "📦 同步基线技能到 $TARGET_DIR ..."
 rsync -av "$TEMP_DIR/.cursor/skills/" "$TARGET_DIR/"
 
-# 3. 清理
+# 3. 维护 Kiro / Claude 的 skills 兼容目录
+mkdir -p "$REPO_ROOT/.kiro" "$REPO_ROOT/.claude"
+([ -e "$REPO_ROOT/.kiro/skills" ] || [ -L "$REPO_ROOT/.kiro/skills" ]) && rm -rf "$REPO_ROOT/.kiro/skills"
+([ -e "$REPO_ROOT/.claude/skills" ] || [ -L "$REPO_ROOT/.claude/skills" ]) && rm -rf "$REPO_ROOT/.claude/skills"
+ln -s "../.cursor/skills" "$REPO_ROOT/.kiro/skills"
+ln -s "../.cursor/skills" "$REPO_ROOT/.claude/skills"
+
+# 4. 清理
 rm -rf "$TEMP_DIR"
 
 echo "✅ Skills 同步完成！当前时间: $(date '+%Y-%m-%d %H:%M')"
 echo "💡 提示：请检查 $TARGET_DIR 下的技能是否符合当前项目需求；业务仓独有 skill 已保留。"
+echo "🔗 已同步兼容目录：.kiro/skills -> .cursor/skills，.claude/skills -> .cursor/skills"

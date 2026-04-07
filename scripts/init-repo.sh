@@ -34,13 +34,22 @@ rsync -av .cursor/skills/ "$REPO_ROOT/.cursor/skills/"
 # 4. 创建 .kiro/skills 软链接
 echo "🔗 创建 Kiro Skills 软链接 ..."
 mkdir -p "$REPO_ROOT/.kiro"
-if [ -L "$REPO_ROOT/.kiro/skills" ]; then
-  rm "$REPO_ROOT/.kiro/skills"
+if [ -e "$REPO_ROOT/.kiro/skills" ] || [ -L "$REPO_ROOT/.kiro/skills" ]; then
+  rm -rf "$REPO_ROOT/.kiro/skills"
 fi
 # 软链接目标相对于 .kiro/ 目录：../.cursor/skills 即仓库根下的 .cursor/skills
 ln -s "../.cursor/skills" "$REPO_ROOT/.kiro/skills"
 
-# 5. 创建可选的 memory 目录结构
+# 5. 创建 .claude/skills 软链接
+echo "🔗 创建 Claude Skills 软链接 ..."
+mkdir -p "$REPO_ROOT/.claude"
+if [ -e "$REPO_ROOT/.claude/skills" ] || [ -L "$REPO_ROOT/.claude/skills" ]; then
+  rm -rf "$REPO_ROOT/.claude/skills"
+fi
+# 软链接目标相对于 .claude/ 目录：../.cursor/skills 即仓库根下的 .cursor/skills
+ln -s "../.cursor/skills" "$REPO_ROOT/.claude/skills"
+
+# 6. 创建可选的 memory 目录结构
 echo "🧠 创建 memory 目录结构（可选）..."
 mkdir -p "$REPO_ROOT/memory"
 cat > "$REPO_ROOT/memory/.gitkeep" << 'EOF'
@@ -55,13 +64,14 @@ cat > "$REPO_ROOT/memory/.gitkeep" << 'EOF'
 # - incidents/    # 故障复盘（可选）
 EOF
 
-# 6. 复制 CURSOR.md 与可选脚本
+# 7. 复制 CURSOR.md / CLAUDE.md 与可选脚本
 echo "📋 复制 AI 工具约定文件 ..."
 cp CURSOR.md "$REPO_ROOT/"
+cp CLAUDE.md "$REPO_ROOT/"
 mkdir -p "$REPO_ROOT/scripts"
 [ -f scripts/sync-skills.sh ] && cp scripts/sync-skills.sh "$REPO_ROOT/scripts/" && echo "   - 已复制 scripts/sync-skills.sh（用于后续同步基线仓 Skills）"
 
-# 7. 清理
+# 8. 清理
 cd "$REPO_ROOT"
 rm -rf "$TEMP_DIR"
 
@@ -71,9 +81,11 @@ echo ""
 echo "📁 已创建/同步的文件："
 echo "   - .cursor/skills/     # Agent Skills"
 echo "   - .kiro/skills/      # Kiro 软链接（指向 .cursor/skills）"
+echo "   - .claude/skills/    # Claude 软链接（指向 .cursor/skills）"
 echo "   - docs/              # 文档模板"
 echo "   - memory/            # 知识沉淀目录（可选）"
 echo "   - CURSOR.md          # AI 工具约定"
+echo "   - CLAUDE.md          # Claude Code 约定（可按业务定制）"
 echo ""
 echo "📖 下一步："
 echo "   1. 阅读 CURSOR.md 了解 AI 工具的使用约定（含「每次响应前检查」的 using-skills）"

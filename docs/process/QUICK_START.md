@@ -74,11 +74,13 @@ ls -la .cursor/skills/
 
 | 文件 | 作用 |
 |------|------|
-| `CURSOR.md` | AI 工具使用约定（含「每次响应前检查」using-skills、**Kiro 使用设置**） |
+| `CURSOR.md` | AI 工具使用约定（含「每次响应前检查」using-skills、**Kiro/Claude 使用设置**） |
+| `CLAUDE.md` | Claude Code 使用约定（建议复制到业务仓并按团队流程定制） |
 | `docs/overview.md` | 方法论总览 |
 | `docs/process/QUICK_START.md` | 本卡片 |
 | `.cursor/skills/` | 技能库目录（Cursor / 通用） |
 | `.kiro/skills/` | Kiro 读取的 Skills；软链接至 .cursor/skills 或复制使用，与 Cursor 共用同一套内容 |
+| `.claude/skills/` | Claude 读取的 Skills；软链接至 .cursor/skills 或复制使用，与 Cursor 共用同一套内容 |
 | `memory/` | 团队知识沉淀（可选；decisions / product / engineering / changelog） |
 
 ---

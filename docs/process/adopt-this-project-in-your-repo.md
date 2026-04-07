@@ -27,8 +27,9 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 同步 `docs/` 文档模板
 - 同步 `.cursor/skills/` 技能库
 - 创建 `.kiro/skills/` 软链接（指向 `.cursor/skills`，Kiro 用户可直接使用）
+- 创建 `.claude/skills/` 软链接（指向 `.cursor/skills`，Claude 用户可直接使用）
 - 创建可选的 `memory/` 目录结构
-- 复制 `CURSOR.md` 约定文件
+- 复制 `CURSOR.md`、`CLAUDE.md` 约定文件
 
 初始化完成后，可根据业务需求调整对应文件。
 
@@ -48,6 +49,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 角色配置优先复制正式版 `.cursor/skills/roles.yaml`；若只想看最小结构，可参考 `.cursor/skills/roles.yaml.example`。
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
 - 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。
+- 若业务仓使用 Claude Code，建议保留 `.claude/skills -> .cursor/skills` 软链接，不要维护两套 Skill 文件。
 
 #### 如何接入基线技能（使用 sync-skills.sh）
 

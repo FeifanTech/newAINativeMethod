@@ -36,6 +36,7 @@
 - **docs/process/**：研发流程、Code Review、AI 使用规范、Skills 与落地指南。
 - **.cursor/skills/**：通用与分类 Skills，供 Cursor 匹配使用。
 - **.kiro/skills/**：同上，通过软链接或复制 .cursor/skills/ 使用。
+- **.claude/skills/**：同上，通过软链接或复制 .cursor/skills/ 使用。
 - **projects/**：按方法论落地的样板工程（如 qiandao-lake-traceability-demo）。
 
 ## Kiro 使用设置
@@ -53,5 +54,21 @@ cp -r .cursor/skills/* .kiro/skills/
 ```
 
 设置完成后，打开 Kiro，在 **Agent Steering & Skills**（或等价）面板中确认已加载的 Skills。Kiro 会按 Agent Skills 标准读取 `.kiro/skills/` 下的 SKILL.md，并根据请求自动匹配对应的 Skill；与 Cursor 共用同一套 Skill 内容，仅目录约定不同（.cursor/skills vs .kiro/skills）。
+
+## Claude Code 使用设置
+
+本仓库使用 **Agent Skills** 标准，已兼容 Claude Code。设置方式：
+
+```bash
+# 方式一：软链接（推荐，保持同步更新）
+mkdir -p .claude/skills
+ln -s "$(pwd)/.cursor/skills" .claude/skills
+
+# 方式二：直接复制
+mkdir -p .claude/skills
+cp -r .cursor/skills/* .claude/skills/
+```
+
+设置完成后，Claude Code 会按 Agent Skills 约定读取 `.claude/skills/` 下的 Skills。为避免漂移，建议始终维护 `.cursor/skills/`，通过 `.claude/skills` 软链接复用。
 
 更多说明见 **docs/overview.md**。
