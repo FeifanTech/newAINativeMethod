@@ -283,6 +283,7 @@
 | Operations | 部署审查 / 发布 | Light: 变更清单；Standard/Deep: k8s-deploy-guard 等 | k8s-deploy-guard、release-notes |
 | Operations | 可观测性 / 回滚 | - | 运维与监控相关（若有） |
 | **元 / 全局** | 响应前检查、Stage 执行时加载对应 Skill | - | **using-skills**（每次响应前检查；若有 Plan 按 Plan 加载） |
+| **元 / 全局** | 多步 Agent、工具链、生产级可靠性（缰绳） | 各 Stage 可叠加 | **harness-engineering**（上下文/工具/验证/成本/可观测最小检查；见 RFC/harness-engineering） |
 | **故障 / Bug** | 根因→多层防御→验证→沉淀 | - | **systematic-debugging**（与 memory/ 衔接） |
 
 *实际映射须随仓库 Skills 与 docs 变更而更新。核心 Skill 均含红旗清单（各 5 条），触达即停、交人决策。*

@@ -106,6 +106,7 @@ description: 用第三人称写：这个技能做什么；在什么情况下使�
 - **skill-learner-developer**：从市场学习 skills、开发新 skill、优化既有 skill 的 meta-skill。说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」时使用；内含 SkillsMP、Agent Skills Guide、Anthropic/skills 等来源与开发/优化检查清单；核心 Skill 建议用 TDD 方法开发（见 docs/process/skill-development-workflow.md）。
 - **development-principles** / **code-standards** / **architecture-principles** / **product-design-principles**：原则与检查清单；各含**红旗清单**，触达须停止并交人决策。
 - **systematic-debugging**：Bug/故障/异常时的系统化调试流程（根因→多层防御→验证→沉淀），与 memory/ 衔接。
+- **harness-engineering**：Harness Engineering（缰绳工程）最小检查：多步 Agent、工具链、生产可靠性；含 AI-DLC Stage 对照与红旗。概念映射见 `RFC/harness-engineering/RFC-harness-engineering-mapping.md`。
 - **role-developer** / **role-architect** / **role-product-designer**：角色 Agent，串联对应原则类 skill。
 
 ---

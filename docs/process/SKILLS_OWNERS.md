@@ -24,6 +24,7 @@
 | role-product-designer | @产品组 | 产品设计师角色定义 |
 | skill-learner-developer | @开发组 | Skill 开发规范 |
 | using-skills | @文档组 | Skill 使用说明 |
+| harness-engineering | @开发组 | 缰绳工程（Harness）最小检查与 AI-DLC Stage 对照；与 @架构组 协同评审运行时设计 |
 
 ---
 

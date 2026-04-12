@@ -7,6 +7,7 @@
 | 分类 | Skill 目录名 | 说明 |
 |------|--------------|------|
 | **元 Skill (core)** | using-skills | 每次响应前检查并加载相关 Skill；与 AI-DLC Stage/Plan 一致；Human Gate 须人确认 |
+| **Harness (core)** | harness-engineering | 缰绳工程最小实践：上下文/工具/验证/成本/可观测；多步 Agent 与生产可靠性；含红旗与 AI-DLC Stage 对照；映射见 RFC/harness-engineering/ |
 | **架构 (architecture)** | architecture-principles | 技术架构原则与方案评审清单；含红旗清单（5 条，触达即停） |
 | | role-architect | 架构师角色：技术方案设计、架构评审、选型、ADR |
 | **产品 (product)** | product-design-principles | 产品设计原则与 PRD/需求评审清单；含红旗清单（5 条，触达即停） |
@@ -38,6 +39,7 @@
 | 发版 / Release Notes | release-notes-from-commits（从 commit 生成发布说明） |
 | 决策汇总 | decisions-summary（汇总已采纳决策） |
 | 学技能 / 写技能 | skill-learner-developer（核心 Skill 用 TDD 工作流，见 skill-development-workflow.md） |
+| 多步 Agent / 工具链 / 生产可靠性 | harness-engineering（与 Human Gate 互补；概念映射见 RFC/harness-engineering） |
 
 ## 业务仓复制建议
 

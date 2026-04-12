@@ -45,7 +45,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 
 - 从本仓 `.cursor/skills/` 拷贝需要的技能到业务仓的 `.cursor/skills/` 下：
   - **通用**：`architecture-principles`、`role-architect`、`product-design-principles`、`role-product-designer`、`development-principles`、`code-standards`、`role-developer`。
-  - **可选**：`design-review-checklist`、`implementation-plan`、`skill-learner-developer`。
+  - **可选**：`design-review-checklist`、`implementation-plan`、`skill-learner-developer`、`harness-engineering`（多步 Agent / 工具链 / 生产可靠性）。
 - 角色配置优先复制正式版 `.cursor/skills/roles.yaml`；若只想看最小结构，可参考 `.cursor/skills/roles.yaml.example`。
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
 - 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。

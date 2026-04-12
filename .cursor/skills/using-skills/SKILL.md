@@ -29,6 +29,7 @@ description: 核心元技能。在任何响应前必须检查是否有相关 Ski
 - 涉及**PRD/需求/产品设计/用户故事**？→ 加载 **product-design-principles**
 - 涉及**Bug/故障/异常/调试**？→ 加载 **systematic-debugging**
 - 涉及**学习或开发/优化 Skill**？→ 加载 **skill-learner-developer**
+- 涉及**多步 Agent / 工具调用链 / 生产级可靠性 / Harness Engineering（缰绳工程）**（上下文装配、工具编排、验证闭环、成本中止、可观测）？→ 加载 **harness-engineering**
 
 **规则**：只要存在与上述任一类相关的可能，就必须加载对应 Skill，不能以「可能不相关」为由跳过。
 
@@ -46,6 +47,7 @@ description: 核心元技能。在任何响应前必须检查是否有相关 Ski
 
 - 「正在使用 architecture-principles 以确保方案符合边界与可观测性要求」
 - 「正在使用 code-standards 做 Code Review」
+- 「正在使用 harness-engineering 对照 AI-DLC Stage 做缰绳检查（上下文/工具/验证/成本/记录）」
 
 ### Step 5：按 Skill 执行
 
@@ -103,4 +105,4 @@ description: 核心元技能。在任何响应前必须检查是否有相关 Ski
 ## 使用说明
 
 - 本 Skill 应在 CURSOR.md 或项目规则中被引用，使「每次响应前执行 using-skills 的检查」成为默认行为。
-- 与 **architecture-principles**、**code-standards**、**development-principles**、**product-design-principles**、**systematic-debugging**、**skill-learner-developer** 等配合：本 Skill 决定「用谁」，后者决定「怎么做」。
+- 与 **architecture-principles**、**code-standards**、**development-principles**、**product-design-principles**、**systematic-debugging**、**skill-learner-developer**、**harness-engineering** 等配合：本 Skill 决定「用谁」，后者决定「怎么做」。

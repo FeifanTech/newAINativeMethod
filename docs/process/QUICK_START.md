@@ -27,6 +27,7 @@
 | 更新文档 | `doc-reflector` | 代码→文档同步 |
 | 生成 Release Notes | `release-notes-from-commits` | 自动生成 |
 | 做架构/设计决策 | `decisions-summary` | 自动汇总 |
+| 多步 Agent / 工具链 / 生产可靠性 | `harness-engineering`（叠加 `using-skills`） | 缰绳检查 + Stage 对照 |
 
 ---
 

@@ -227,7 +227,7 @@ Owner Review（Owner 见 [SKILLS_OWNERS.md](./SKILLS_OWNERS.md) 中该 Skill 对
 ### Q3: AI 产出质量不一致怎么办？
 
 - 统一使用本仓模板（`docs/product/`、`docs/architecture/` 下 PRD/技术方案模板）
-- 使用本仓 **Skills** 约束 AI 产出：每次响应前执行 [using-skills](../../.cursor/skills/using-skills/SKILL.md) 的检查，按任务类型加载 [product-design-principles](../../.cursor/skills/product-design-principles/SKILL.md)、[architecture-principles](../../.cursor/skills/architecture-principles/SKILL.md)、[code-standards](../../.cursor/skills/code-standards/SKILL.md) 等；触达红旗清单须停止并交人决策
+- 使用本仓 **Skills** 约束 AI 产出：每次响应前执行 [using-skills](../../.cursor/skills/using-skills/SKILL.md) 的检查，按任务类型加载 [product-design-principles](../../.cursor/skills/product-design-principles/SKILL.md)、[architecture-principles](../../.cursor/skills/architecture-principles/SKILL.md)、[code-standards](../../.cursor/skills/code-standards/SKILL.md) 等；多步 Agent / 工具链 / 生产可靠性场景叠加 [harness-engineering](../../.cursor/skills/harness-engineering/SKILL.md)；触达红旗清单须停止并交人决策
 - Code Review 严格化，与 development-principles、code-standards 检查清单对齐
 
 ### Q4: 如何追踪 AI 产出的任务？

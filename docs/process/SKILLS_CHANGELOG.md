@@ -8,6 +8,7 @@
 
 ### 新增
 
+- `harness-engineering`: Harness Engineering（缰绳工程）最小检查点与红旗，AI-DLC Stage 对照；映射见 `RFC/harness-engineering/`
 - `systematic-debugging`: 系统化调试流程，四阶段（根因追踪→多层防御→修复验证→经验沉淀）
 - `using-skills`: Skill 自动加载逻辑，根据任务类型自动匹配
 
