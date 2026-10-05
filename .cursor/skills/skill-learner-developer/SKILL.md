@@ -20,6 +20,10 @@ description: 从市场学习 skills、开发新 skill、优化既有 skill 的 m
 | **SkillsMP** | 海量技能发现、按 SKILL.md 标准、可安装 | https://skillsmp.com — 语义/关键词搜索，分类浏览，支持 Claude/Codex/ChatGPT |
 | **Agent Skills Guide** | 人工精选、少而精、学写法 | https://www.agentskills.guide — 编辑推荐，按领域分类 |
 | **Anthropic/skills** | 官方示例与 SKILL.md 规范 | https://github.com/anthropics/skills — 文档生成等示例，技能规范说明 |
+| **Tencent awesome-devbuddy** | Agents/Commands/Skills/Rules 共享集合、examples 样例 | https://github.com/Tencent/awesome-devbuddy — 学分层与渐进示例，勿改真源目录为 `.codebuddy/` |
+| **TencentCloudBase/skills** | 产品 Skills + `npx skills add`、MUST/NOT 路由 | https://github.com/TencentCloudBase/skills — 学 description 纪律与安装 UX |
+| **Tencent-RTC/agent-skills** | 多 IDE 安装（cursor/claude/codex） | https://github.com/Tencent-RTC/agent-skills — 学多工具对齐 UX |
+| **DeepSeek Harness** | 运行时级 harness（插件化） | https://github.com/deepseek-ai/deepseek-harness — **仅概念对照**；本仓不上默认运行时 |
 | **awesome-cursorrules** | Cursor 规则写法、上下文与风格 | https://github.com/PatrickJS/awesome-cursorrules — 规则/配置可借鉴到 SKILL.md |
 | **Cursor Directory** | 官方社区、规则与 MCP | https://cursor.directory |
 
@@ -54,13 +58,16 @@ description: 从市场学习 skills、开发新 skill、优化既有 skill 的 m
 ```markdown
 ---
 name: <skill-name>
-description: <一句话说明用途与触发场景。当用户说「…」时使用。>
+description: <做什么>。当用户说「…」或涉及「…」时使用。MUST：…。NOT for：…。
 ---
 
 # <Skill 标题>
 
 ## 角色与目标 / 核心原则
 （本 skill 的定位与要达成的结果）
+
+## Preflight（可选）
+（执行前最小检查：缺什么上下文、先加载哪个 Skill）
 
 ## 动作顺序 / 检查清单 / 原则要点
 （按步骤或按检查项，可引用其他 skills）
@@ -72,16 +79,19 @@ description: <一句话说明用途与触发场景。当用户说「…」时使
 - **提交 GitHub**：任务或迭代完成后，默认执行或明确建议用户执行「提交到 GitHub」…
 
 ## 使用说明
-（何时用、与哪些 skill 配合）
+（何时用、何时不用、与哪些 skill 配合）
 ```
+
+可选目录：`examples/`（渐进样例）、`scripts/`（校验脚本）。写作与分发细则见 **docs/process/skill-writing-and-distribution.md**。
 
 ### 2.2 开发检查清单
 
-- [ ] **frontmatter**：name 简短唯一，description 含「当用户说…时使用」类触发描述。
+- [ ] **frontmatter**：name 简短唯一；description 含 WHAT + WHEN（「当用户说…」），建议含 **MUST / NOT for**。
 - [ ] **单一职责**：一个 skill 只负责一类能力（如「学习与开发 skill」而非「学习+写代码+部署」）。
 - [ ] **可触发**：description 或使用说明里列出典型用户说法或场景，便于 Agent 匹配。
+- [ ] **边界清晰**：写明不适用场景（NOT for），避免误触发。
 - [ ] **可串联**：如需依赖其他 skills，在「动作顺序」或「使用说明」中写明（如先 development-principles 再 code-standards）。
-- [ ] **可执行**：原则与清单具体到可操作（避免空泛描述）。
+- [ ] **可执行**：原则与清单具体到可操作（避免空泛描述）；流程类 Skill 建议提供 `examples/` 最小样例。
 - [ ] **收尾动作**：包含「工作结束后的默认动作」且含「提交 GitHub」建议。
 
 ### 2.3 与本仓库约定对齐
@@ -139,4 +149,4 @@ description: <一句话说明用途与触发场景。当用户说「…」时使
 
 ## 使用说明
 
-用户可说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」「写一个能学习和优化 skills 的 skill」，本 Skill 将按「学习→开发→优化」三部分执行；需要时先到 SkillsMP / Agent Skills Guide / Anthropic 查示例再落笔。**核心 Skill** 开发/优化时，须按 2.0 的 TDD 工作流（RED–GREEN–REFACTOR）执行，详见 **docs/process/skill-development-workflow.md**。
+用户可说「从市场学 skills」「帮我开发一个 skill」「优化现有 skill」「写一个能学习和优化 skills 的 skill」，本 Skill 将按「学习→开发→优化」三部分执行；需要时先到 SkillsMP / Agent Skills Guide / Anthropic / 腾讯共享仓查示例再落笔。**核心 Skill** 开发/优化时，须按 2.0 的 TDD 工作流（RED–GREEN–REFACTOR）执行，详见 **docs/process/skill-development-workflow.md**。写作规范（MUST/NOT、examples、多 IDE 分发）见 **docs/process/skill-writing-and-distribution.md**。

@@ -119,4 +119,10 @@ YYYY-MM-DD
 
 ---
 
+## 与写作规范的关系
+
+RED–GREEN–REFACTOR 解决「Skill 是否针对真实失败」。落笔时仍建议遵守 [skill-writing-and-distribution.md](./skill-writing-and-distribution.md)：description 含 MUST/NOT、流程类 Skill 可选 `examples/`。
+
+---
+
 *本文档与 `.cursor/skills/skill-learner-developer/SKILL.md` 中的「2.0 Skill 开发工作流（TDD）」对应；核心 Skill 开发/优化时请按本流程执行。*

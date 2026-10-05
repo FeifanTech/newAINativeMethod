@@ -38,7 +38,7 @@
 | 部署 / K8s | k8s-deploy-guard（部署配置守卫） |
 | 发版 / Release Notes | release-notes-from-commits（从 commit 生成发布说明） |
 | 决策汇总 | decisions-summary（汇总已采纳决策） |
-| 学技能 / 写技能 | skill-learner-developer（核心 Skill 用 TDD 工作流，见 skill-development-workflow.md） |
+| 学技能 / 写技能 | skill-learner-developer（核心 Skill 用 TDD 工作流，见 skill-development-workflow.md；写作/分发见 skill-writing-and-distribution.md） |
 | 多步 Agent / 工具链 / 生产可靠性 | harness-engineering（与 Human Gate 互补；概念映射见 RFC/harness-engineering） |
 
 ## 业务仓复制建议
@@ -46,3 +46,4 @@
 - 复制时可按需只拷贝上述部分目录（如只拷贝 architecture-principles + role-architect）。
 - 本仓为 Skills 的**单一真相源**；业务仓可定期从本仓同步（手动拷贝或 git submodule/subtree）。
 - 根目录另有 `roles.yaml.example`，可作多角色配置参考。
+- **写作与多 IDE 分发**：见 [skill-writing-and-distribution.md](./skill-writing-and-distribution.md)。

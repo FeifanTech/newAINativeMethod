@@ -8,9 +8,11 @@ description: Harness Engineering（缰绳工程）可执行检查：在多步任
 ## 定位
 
 **Harness** = 模型以外的系统层：如何**约束、供给、验证、纠偏** Agent，使结果可重复、可审计、可止损。  
-本 Skill 提供**最小可执行检查点**与**红旗**；概念映射见 `RFC/harness-engineering/RFC-harness-engineering-mapping.md`。
+本 Skill 提供**最小可执行检查点**与**红旗**；概念映射与外部开源对照见 `RFC/harness-engineering/RFC-harness-engineering-mapping.md`。写作/分发约定见 `docs/process/skill-writing-and-distribution.md`。
 
 **与 Human Gate**：Harness 管「机械与流程是否过关」；Human Gate 管「人是否承担风险与范围」。二者都须满足，不能互相替代。
+
+**与 DeepSeek Harness**：可借鉴其 session 真源、工具护栏、approval 等**概念**；本仓**不**将 `dsh` 设为默认运行时。
 
 ---
 

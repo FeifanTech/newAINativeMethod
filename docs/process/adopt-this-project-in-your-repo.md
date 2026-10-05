@@ -50,6 +50,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
 - 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。
 - 若业务仓使用 Claude Code，建议保留 `.claude/skills -> .cursor/skills` 软链接，不要维护两套 Skill 文件。
+- **写作与分发**（MUST/NOT、可选 `examples/`、多 IDE、与 `npx skills add` 的关系）：见 [skill-writing-and-distribution.md](./skill-writing-and-distribution.md)。
 
 #### 如何接入基线技能（使用 sync-skills.sh）
 
@@ -59,6 +60,13 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
   2. 在业务仓根目录执行：`chmod +x scripts/sync-skills.sh && ./scripts/sync-skills.sh`。
   3. （可选）将此命令加入 CI/CD 流水线或 npm `postinstall` 钩子，在每次 build 或 install 时拉取最新技能。
 - **语义**：基线仓中的 skill 会**覆盖**本地同名目录；业务仓独有 skill（基线仓中不存在的目录）会**保留**。依赖：git（2.25+ 支持 sparse-checkout）、rsync（Mac/Linux 常见；Windows 可用 WSL 或 Git Bash）。
+- **多 IDE**：同步后应存在 `.kiro/skills`、`.claude/skills` → `.cursor/skills`（脚本会重建）。也可手工：`ln -s "$(pwd)/.cursor/skills" .kiro/skills`（及 Claude 同理）。
+- **与社区 `npx skills add`**：若团队用 skills CLI 安装其它来源 Skill，安装后仍建议跑一次 `sync-skills.sh` 或确认兼容目录未漂移；本仓默认入口仍是本脚本，不强制自建 npm 包。
+
+#### 选择性复制（共享集合模式）
+
+- 不必全量同步：可只 rsync 需要的 `.cursor/skills/<name>/`（至少保留 `using-skills`）。
+- 写法与 examples 约定见 [skill-writing-and-distribution.md](./skill-writing-and-distribution.md)。
 
 #### 如何生成统一角色入口（使用 build-role-prompt.sh）
 

@@ -48,7 +48,7 @@
 - **快速上手**：阅读 **docs/process/QUICK_START.md** 获取一页纸快速指南。
 - **多人协作**：阅读 **docs/process/multi-person-collaboration.md** 了解大型项目的协作模式。
 
-- **Harness Engineering（缰绳工程）**：阅读 **RFC/harness-engineering/RFC-harness-engineering-mapping.md**；多步 Agent / 工具链 / 生产可靠性场景叠加 Skill **harness-engineering**（与 `using-skills`、Human Gate 配合）。
+- **Harness Engineering（缰绳工程）**：阅读 **RFC/harness-engineering/RFC-harness-engineering-mapping.md**（含外部开源对照）；多步 Agent / 工具链场景叠加 Skill **harness-engineering**；Skill 写作与多 IDE 分发见 **docs/process/skill-writing-and-distribution.md**。
 
 - **企业级检查清单（可选）**：若项目为 **Java/Spring**、**Python/FastAPI 或 Django**、**TypeScript/Node/Nest**，架构与编码类 Skill 会结合 **docs/architecture/** 下对应 CHECKLIST（JAVA / PYTHON / TS）逐项审查并给出结论；其他技术栈可跳过。
 

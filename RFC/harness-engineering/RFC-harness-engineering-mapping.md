@@ -48,12 +48,51 @@
 
 - **A**：本文档（映射与术语）。  
 - **B**：`.cursor/skills/harness-engineering/SKILL.md`（检查清单 + 红旗 + AI-DLC Stage 对照）。  
-- **非目标**：自建统一 Agent 运行时、全仓自动化评测平台、商业 harness 产品集成。
+- **非目标**：自建统一 Agent 运行时、全仓自动化评测平台、商业 harness 产品集成；**不**将 DeepSeek Harness 等运行时绑为本仓默认依赖。
 
 ---
 
-## 6. 修订记录
+## 6. 外部开源对照（学模式，不绑依赖）
+
+本节记录对业界开源项目的对照结论，用于指导本仓「借什么 / 不借什么」。详细写作与分发约定见 **docs/process/skill-writing-and-distribution.md**。
+
+### 6.1 DeepSeek Harness（运行时级）
+
+- **仓库**：[deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)（`dsh`；Cordis「Everything is a Plugin」）
+- **定位**：完整 Agent 运行时（模型适配、工具护栏、session log、sandbox/approval、profile：`web` / `headless` / `sdk` / `acp` 等）
+- **状态**：MIT；官方标注 **developer preview**，存在破坏性变更风险
+- **对本仓**：
+  - **可借鉴（概念）**：session 为真源、工具 pre/post 护栏、capability seam、approval/sandbox、turn/step 可观测——可充实 `harness-engineering` 的检查表述
+  - **不采纳（默认路径）**：不把 `dsh` 作为基线仓默认执行引擎或 submodule；个人可可选试用，产出仍经 PR 回写 `.cursor/skills` / `memory`
+
+### 6.2 腾讯 Skills 共享（分发与写作）
+
+| 项目 | 仓库 | 对本仓的价值 |
+|------|------|--------------|
+| **Awesome CodeBuddy** | [Tencent/awesome-devbuddy](https://github.com/Tencent/awesome-devbuddy) | Agents / Commands / Skills / Rules **分层共享**；Skill 可带 **examples/** 渐进样例；选择性复制进业务仓 |
+| **CloudBase Skills** | [TencentCloudBase/skills](https://github.com/TencentCloudBase/skills) | `npx skills add …` 安装体验；description 的 **MUST / NOT for / preflight** 路由纪律 |
+| **TRTC Agent Skills** | [Tencent-RTC/agent-skills](https://github.com/Tencent-RTC/agent-skills) | `add --ide cursor\|claude\|codex\|all` 的多 IDE 安装 UX |
+
+- **对本仓**：
+  - **可借鉴**：写作规范（何时用/何时不用、preflight）、可选 `examples/`、多 IDE 一次对齐、Commands 作为「可发现一键动作」索引
+  - **不采纳**：不以 `.codebuddy/` 替代 `.cursor/skills` 真源；不批量搬运 CloudBase/TRTC 业务 Skill 正文
+
+### 6.3 对照总表
+
+| 维度 | 本仓 | DeepSeek Harness | 腾讯 Skills 共享 |
+|------|------|------------------|------------------|
+| 定位 | 方法论 + Agent Skills 模板 | Agent 运行时 / 插件 OS | 能力包共享与产品 Skills |
+| Context | CURSOR / memory / prompt 脚本 | Session log + prompt assembly | 约定文件 + Skill 正文 |
+| Tools | IDE + Skill 约定 | 护栏流水线 + sandbox | 引导/脚本为主 |
+| Verification | 红旗 + 流程清单 | pre/post tool、approval | examples 自测、review skill |
+| 分发 | `sync-skills.sh` / init-repo | 插件包 / profiles | 复制目录 / `npx skills add` / 多 IDE |
+| 借鉴优先级 | — | 概念高、代码接入低 | 分发与写作高、业务内容低 |
+
+---
+
+## 7. 修订记录
 
 | 日期 | 说明 |
 |------|------|
 | 2026-04-12 | 初版：A 映射 + 与 B（Skill）配套 |
+| 2026-04-12 | 增补 §6 外部开源对照（DeepSeek Harness、腾讯 Skills 共享） |

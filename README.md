@@ -45,7 +45,7 @@ CLAUDE.md          # Claude Code 约定（可直接复制到业务仓）
 - **全景图与执行清单**：见 **docs/overview.md** 的「五、基线仓与业务仓协同全景」（Mermaid 图）与「六、立即执行清单」。
 - **分发**：业务仓使用 `scripts/sync-skills.sh` 从本仓同步 `.cursor/skills`。
 - **统一入口**：可使用 `scripts/build-role-prompt.sh` 按角色拼接 `using-skills`、角色 Skills、`CURSOR.md` 与 `memory/`，生成团队统一 prompt 入口，减少多人协作时的上下文漂移。
-- **Harness Engineering**：概念映射见 **RFC/harness-engineering/RFC-harness-engineering-mapping.md**；执行检查见 Skill **harness-engineering**（多步 Agent / 工具链 / 生产可靠性）。
+- **Harness Engineering**：概念映射与外部开源对照见 **RFC/harness-engineering/RFC-harness-engineering-mapping.md**；执行检查见 Skill **harness-engineering**；写作/分发见 **docs/process/skill-writing-and-distribution.md**。
 - **遗留项目接入**：先用 `docs/process/legacy-architecture-baseline-template.md` 产出架构基线快照；若要让 AI 先出初稿，见 `docs/process/generate-legacy-architecture-baseline-with-ai.md`；随后再按 `docs/process/legacy-project-adoption-template.md` 渐进导入。
 - **防漂移**：Skill `doc-reflector` 在代码变更后反向更新 `docs/` 下 PRD/架构文档。
 - **Ops**：Skill `k8s-deploy-guard` 在编写 K8s/Docker 配置时做资源、安全与探针检查。

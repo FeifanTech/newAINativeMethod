@@ -14,7 +14,14 @@
 
 ### 更新
 
+- `using-skills`: 多步 Agent / harness 场景须加载 `harness-engineering`
+- `skill-learner-developer`: 增补腾讯/DeepSeek 来源对照；description 推荐 MUST/NOT；指向 `skill-writing-and-distribution.md`
 - 统一所有 Skills 遵循 [Agent Skills](https://agentskills.io) 标准
+
+### 文档
+
+- `docs/process/skill-writing-and-distribution.md`: Skill 写作与分发约定（借鉴腾讯共享仓；DeepSeek 仅概念对照）
+- `RFC/harness-engineering/RFC-harness-engineering-mapping.md` §6: 外部开源对照
 
 ---
 
