@@ -1,7 +1,35 @@
 # 飞书 + GitHub 工作流（流程卡）
 
-> 背景与取舍见 `RFC/feishu-github-flow/RFC-feishu-github-flow.md`。本文是可直接执行的一页流程。
+> 背景与取舍见 `RFC/feishu-github-flow/RFC-feishu-github-flow.md`。本文是可直接执行的一页流程。  
+> 总览图见 [QUICK_START.md](./QUICK_START.md) §2。
 
+```mermaid
+graph TD
+  subgraph Feishu [飞书 协作界面]
+    G[一需求一群]
+    Card[需求卡公告]
+    Talk[澄清 评审 放行通知]
+  end
+
+  subgraph GitHubSide [GitHub 交付真相]
+    Issue[Issue 即需求卡]
+    PR[PR 与验证证据]
+    CI[CI 与 Review]
+  end
+
+  subgraph GitAssets [Git 资产]
+    Spec[docs Spec 与 PRD]
+    Mem[memory 决策与 changelog]
+  end
+
+  G --> Card
+  Card --> Issue
+  Talk --> Spec
+  Spec --> PR
+  PR --> CI
+  CI --> Mem
+  Talk -.->|定稿后回写| Spec
+```
 ## 1. 建群与立项
 
 1. 每个需求建一个飞书群，群名：`[需求] 简称 #IssueNo`。

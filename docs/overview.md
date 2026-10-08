@@ -45,7 +45,7 @@
 
 更细的步骤见 **docs/process/adopt-this-project-in-your-repo.md**。
 
-- **快速上手**：阅读 **docs/process/QUICK_START.md** 获取一页纸快速指南。
+- **快速上手**：阅读 **docs/process/QUICK_START.md**（含仓库结构图、飞书+GitHub 流程、场景→Skill 路由图）。
 - **多人协作**：阅读 **docs/process/multi-person-collaboration.md** 了解大型项目的协作模式。
 
 - **Harness Engineering（缰绳工程）**：阅读 **RFC/harness-engineering/RFC-harness-engineering-mapping.md**（含外部开源对照）；多步 Agent / 工具链场景叠加 Skill **harness-engineering**；Skill 写作与多 IDE 分发见 **docs/process/skill-writing-and-distribution.md**。
