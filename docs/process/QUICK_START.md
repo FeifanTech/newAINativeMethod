@@ -102,6 +102,7 @@ ls -la .cursor/skills/
 - [adopt-this-project-in-your-repo.md](./adopt-this-project-in-your-repo.md) - 在业务仓中落地本方法论（含 init-repo 步骤）
 - [multi-person-collaboration.md](./multi-person-collaboration.md) - 多人协作与 Human Gate 分层
 - [skill-writing-and-distribution.md](./skill-writing-and-distribution.md) - Skill 写作（MUST/NOT）与多 IDE 分发
+- [feishu-github-workflow.md](./feishu-github-workflow.md) - 飞书 + GitHub 全流程（三个真人门）；配套 [需求卡](./requirement-card-template.md)、[度量](./ai-native-metrics.md)
 - [CURSOR_SKILLS_GUIDE.md](./CURSOR_SKILLS_GUIDE.md) - Skills 与 Rules 使用指南
 
 ---

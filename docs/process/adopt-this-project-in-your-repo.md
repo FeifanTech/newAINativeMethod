@@ -50,6 +50,7 @@ curl -sL https://raw.githubusercontent.com/FeifanTech/newAINativeMethod/main/scr
 - 业务专属技能可自行新增，参考本仓 [SKILL.md 结构](https://www.agentskills.guide) 与 [docs/process/SKILLS_INDEX.md](./SKILLS_INDEX.md)。
 - 本仓为 Skills 的**单一真相源**；业务仓建议定期与本仓同步（见下文「技能漂移」）。**一键同步**可使用本仓提供的 `scripts/sync-skills.sh`（见下）。
 - 若业务仓使用 Claude Code，建议保留 `.claude/skills -> .cursor/skills` 软链接，不要维护两套 Skill 文件。
+- **飞书 + GitHub 流程（可选）**：复制 `.github/pull_request_template.md` 到业务仓，并按 [feishu-github-workflow.md](./feishu-github-workflow.md) 使用 [需求卡](./requirement-card-template.md) 与 [四指标](./ai-native-metrics.md)。
 - **写作与分发**（MUST/NOT、可选 `examples/`、多 IDE、与 `npx skills add` 的关系）：见 [skill-writing-and-distribution.md](./skill-writing-and-distribution.md)。
 
 #### 如何接入基线技能（使用 sync-skills.sh）
