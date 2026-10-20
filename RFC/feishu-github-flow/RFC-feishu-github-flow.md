@@ -1,7 +1,7 @@
 # RFC：飞书 + GitHub 的 AI-native 全流程约定
 
 - 状态：Draft
-- 来源：AliExpress/淘宝天猫海外 AI Native 实践、阿里《AI Native 研发范式实践手册》（只借约定与判定规则，不借平台）
+- 来源：AliExpress/淘宝天猫海外 AI Native 实践、阿里《AI Native 研发范式实践手册》、Uber AI 工程闭环访谈归纳（2026-10-14）。只借约定与判定规则，不借平台。
 
 ## 1. 目标与非目标
 
@@ -31,6 +31,10 @@
 | PR 带验证证据与归因 | `.github/pull_request_template.md` |
 | 度量看周期与质量，不看生码率 | `docs/process/ai-native-metrics.md` |
 | 知识沉淀回流 | `memory/` 经 PR 回写 |
+| 进审查前自验证，未通过回到编写 | `feishu-github-workflow.md` §3.1；PR 模板「建议审查重点」 |
+| 故障带复现证据再修，与功能需求分开 | 同上 §3.2；需求卡「已知风险」 |
+| 规划前先有负责人、相关模块与文档 | `requirement-card-template.md` |
+| Agent 权限等于当前用户 | `harness-engineering` 红旗第 8 条 |
 
 ## 4. 分阶段
 
@@ -52,3 +56,4 @@
 ## 6. 修订记录
 
 - 初版：阶段 0～2 落地。
+- 增补：自验证回路、故障回路、需求卡上下文三项、PR 审查重点（借鉴 Uber 闭环的阶段划分，不引入其平台）。

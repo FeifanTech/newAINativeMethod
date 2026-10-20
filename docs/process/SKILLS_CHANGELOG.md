@@ -14,7 +14,7 @@
 
 ### 更新
 
-- `harness-engineering`: 新增「三态门控」（PASS/BLOCKED/UNKNOWN，UNKNOWN≠PASS）与第 6 条红旗
+- `harness-engineering`: 新增「三态门控」（PASS/BLOCKED/UNKNOWN，UNKNOWN≠PASS）；红旗增至 8 条（含自验证未通过不得送审、Agent 权限等于当前用户）
 - `using-skills`: 多步 Agent / harness 场景须加载 `harness-engineering`
 - `skill-learner-developer`: 增补腾讯/DeepSeek 来源对照；description 推荐 MUST/NOT；指向 `skill-writing-and-distribution.md`
 - 统一所有 Skills 遵循 [Agent Skills](https://agentskills.io) 标准

@@ -43,6 +43,12 @@ description: Harness Engineering（缰绳工程）可执行检查：在多步任
 6. **必检项缺失、未执行或无证据，却宣称通过/完成**  
    常见借口：「应该没问题」「环境跑不了先跳过」。→ 按 UNKNOWN 处理，触达即停，交人决策。
 
+7. **自验证未通过（含 BLOCKED 或 UNKNOWN）仍把结果送交审查**  
+   常见借口：「先让人看看」「CI 会再跑一遍」。→ 触达即停，回到编写；不得进入 G2。
+
+8. **Agent 使用超出当前调用者的权限**（超用户、他人凭证、调用者没有的生产写权限）  
+   常见借口：「这样更快能改完」。→ 触达即停，交人决策。Agent 权限等于当前用户。
+
 ---
 
 ## 三态门控（Guardrail）
@@ -60,6 +66,8 @@ description: Harness Engineering（缰绳工程）可执行检查：在多步任
 - UNKNOWN ≠ PASS。汇总结论只要含 BLOCKED 或 UNKNOWN，就不得宣称「完成」。
 - 汇报时列出每个检查项的三态与证据（命令、输出摘要），不给笼统结论。
 - 放行 UNKNOWN 属于人的风险承担，须在 PR/Issue 记录决定人与原因。
+- 自验证含 BLOCKED 或 UNKNOWN 时，不得把结果送交 G2。先回到编写。
+- Agent 只使用当前调用者已有的权限。
 - PR 模板 `.github/pull_request_template.md` 与 `docs/process/feishu-github-workflow.md` 的三个真人门采用同一三态。
 
 ---
@@ -85,6 +93,8 @@ description: Harness Engineering（缰绳工程）可执行检查：在多步任
 - [ ] **验证**：本步结束用什么**客观标准**判定通过（命令、测试、diff、人工勾选）？
 - [ ] **成本**：是否有可能无限循环？是否设置中止条件（轮次/时间/预算）？
 - [ ] **记录**：关键步骤与结果是否可写入 PR 描述、`memory/changelog.md` 或会话摘要？
+- [ ] **送审**：自验证是否全部 PASS？未通过是否还停在编写，而没有请求 Review？
+- [ ] **权限**：本步操作是否都在当前用户权限内？
 
 ---
 

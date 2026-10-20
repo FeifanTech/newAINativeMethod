@@ -67,19 +67,22 @@ graph TD
 graph LR
   A[飞书群 一需求一群] --> B[需求卡 即 Issue]
   B --> G1{G1 Spec 放行}
-  G1 -->|通过| C[AI 出方案与代码草稿]
-  C --> D[GitHub PR 验证证据]
-  D --> G2{G2 代码放行}
+  G1 -->|通过| C[编写草稿]
+  C --> V[自验证]
+  V -->|未通过| C
+  V -->|通过| G2{G2 代码放行}
   G2 -->|通过| G3{G3 发布放行}
-  G3 -->|通过| E[上线与 changelog]
+  G3 -->|通过| E[上线后观察]
   E --> F[memory 沉淀]
+  E -->|告警或回滚| R[复现证据包]
+  R --> C
 
   G1 -.->|BLOCKED 或 UNKNOWN| H[停 交人决策]
   G2 -.->|BLOCKED 或 UNKNOWN| H
   G3 -.->|BLOCKED 或 UNKNOWN| H
 ```
 
-三个真人门 ↔ 本仓机制：G1 ≈ Mob Elaboration，G2 ≈ Mob Construction，G3 ≈ 发布 Human Gate。  
+三个真人门 ↔ 本仓机制：G1 ≈ Mob Elaboration，G2 ≈ Mob Construction，G3 ≈ 发布 Human Gate。自验证未通过时回到编写，不进入 G2。故障另开复现证据包，再回到编写。  
 详文：[feishu-github-workflow.md](./feishu-github-workflow.md) · [需求卡](./requirement-card-template.md) · [度量](./ai-native-metrics.md)
 
 **三态门控（Harness）**：`PASS` / `BLOCKED` / `UNKNOWN` —— **UNKNOWN ≠ 通过**。见 Skill `harness-engineering`。
@@ -136,6 +139,8 @@ graph TD
 4. 未考虑边界与异常  
 5. 未经 Code Review 合并到主分支  
 6. 必检项缺失/无证据却宣称完成（按 UNKNOWN 处理）
+7. 自验证未通过仍送审
+8. Agent 使用超出当前用户的权限
 
 **必须人确认：** 合并 main/master · 生产部署 · 改数据模型/核心接口 · 安全合规决策
 
